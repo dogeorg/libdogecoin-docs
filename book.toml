@@ -1,0 +1,6 @@
+[book]
+authors = ["qlpqlp"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Libdogecoin, a clean C library of Dogecoin building blocks"
