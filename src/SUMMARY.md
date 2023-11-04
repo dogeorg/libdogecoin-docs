@@ -11,9 +11,7 @@
 - [Eckey](./eckey.md)
 - [Signing](./signing.md)
 - [Tools](./tools.md)
-
-# Community Projects
-- <a href="https://github.com/mydoge-com/dogecoin-js" target="_blank">dogecoin-js</a>
+- [Community Projects](./projects.md)
 
 # Roadmap
 - [Roadmap](./project_roadmap.md)
