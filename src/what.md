@@ -1,6 +1,6 @@
 # Libdogecoin, a clean C library of Dogecoin building blocks
 
-<p><img src="images/libdogecoin-logo-png" alt="The LibDogecoin Logo" width="60%" style="margin-left: 20%;"/></p>
+<p><img src="images/libdogecoin-logo.png" alt="The LibDogecoin Logo" width="60%" style="margin-left: 20%;"/></p>
 
 [![CI](https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ci.yml/badge.svg)](https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ci.yml)[![CodeQL](https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ql.yml/badge.svg)](https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ql.yml)
 
