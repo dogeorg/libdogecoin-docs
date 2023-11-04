@@ -11,17 +11,26 @@
 - [Eckey](./eckey.md)
 - [Signing](./signing.md)
 - [Tools](./tools.md)
-- [Community Projects](./projects.md)
+- [Transaction](./transaction.md)
+- [Transaction Extended](./transaction_extended.md)
 
-# Roadmap
+# Community Projects
+- [Projects](./projects.md)
+
+# Project Roadmap
 - [Roadmap](./project_roadmap.md)
+
+# Contribution
+- [Contributors](./contributors.md)
 
 # Release Process
 - [release-process](./release-process.md)
 
-# Contributing
-- [Translation](./transaction.md)
-- [Extended](./transaction_extended.md)
+# Changelog
+- [Log](./changelog.md)
+
+
+
 
 
 
