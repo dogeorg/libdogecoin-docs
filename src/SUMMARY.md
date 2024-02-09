@@ -7,7 +7,7 @@
 - [Getting Started](./getting_started.md)
 
 # Integration
-- [Addresss](./address.md)
+- [Address](./address.md)
 - [Eckey](./eckey.md)
 - [Signing](./signing.md)
 - [Tools](./tools.md)
@@ -19,12 +19,6 @@
 
 # Project Roadmap
 - [Roadmap](./project_roadmap.md)
-
-# Contribution
-- [Contributors](./contributors.md)
-
-# Release Process
-- [release-process](./release-process.md)
 
 # Changelog
 - [Log](./changelog.md)

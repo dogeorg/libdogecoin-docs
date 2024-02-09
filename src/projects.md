@@ -1,7 +1,7 @@
 # Community Projects
 - [dogecoin-js](https://github.com/mydoge-com/dogecoin-js)
 - [dart-libdogecoin](https://github.com/alamshafil/dart-libdogecoin)
-- [Lib.Dogecoin](hhttps://github.com/UsaRandom/Lib.Dogecoin)
+- [Lib.Dogecoin](https://github.com/UsaRandom/Lib.Dogecoin)
 - [RadioDoge-FirmwareInstaller](https://github.com/UsaRandom/RadioDoge-FirmwareInstaller)
 - [Alien-Libdogecoin](https://github.com/chromatic/Alien-Libdogecoin)
 - [Finance-libdogecoin](https://github.com/chromatic/Finance-libdogecoin)

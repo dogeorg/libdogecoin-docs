@@ -31,7 +31,7 @@ This will be a pure library, providing a set of callable functions to implement 
 
 It is intended that connecting the bits together into an engine be done at the level above, via the networking libraries of the host language.
 
-[See the Project Roadmap for more on the planned stages of development](/project_roadmap.md)
+[See the Project Roadmap for more on the planned stages of development](project_roadmap.md)
 
 [See the Dogecoin Trailmap for more on libdogecoin](https://foundation.dogecoin.com/trailmap/libdogecoin/)
 
@@ -74,7 +74,7 @@ By doing this we will be able to verify that the Libdogecoin implementation of D
 
 ## Code of Shibes
 
-By contributing to this repository you agree to be a basic human being, please see [`CONDUCT.md`](CONDUCT.md)
+By contributing to this repository you agree to be a basic human being, please see [`CONDUCT.md`](https://github.com/dogecoinfoundation/libdogecoin/blob/main/CONDUCT.md)
 
 ## Contributing
 
@@ -84,7 +84,7 @@ By contributing to this repository you agree to be a basic human being, please s
   and join the conversation in the Foundation discord server.
 - **Branch/PRs in this repository (see above point for access)**
 - **Ensure tests pass and coverage is maintained**
-- **Update libdogecoin.h in [`/include/`](include) and example.c in [`/contrib/examples/`](contrib/examples)**
+- **Update libdogecoin.h in [`/include/`] and example.c in [`/contrib/examples/`]**
 - 1 approval from another contributor required to merge to main
 - Don't introduce dependencies without discussion (MIT); our aim is to have as few dependencies as possible, with the ideal (possibly unachievable) goal of having none beyond standard c libs and a compiler.
 - Collaborate before you innovate! (this means, discuss what you're working on where everyone can see, before submitting a change.)
@@ -94,13 +94,13 @@ By contributing to this repository you agree to be a basic human being, please s
 
 Advice on how to navigate this repository:
 
-- [`/.libs/`](.libs) where the static library lives after it has been fully built.
-- [`/contrib/<proj>`](contrib) a place for misc non-core experiments, utils, demo-nodes etc.
-- [`/spec/*.md`](spec) a place to begin documenting the Dogecoin Standard as we go.
-- [`/include/dogecoin/*.h`](include/dogecoin) provides header files for libdogecoin users, look here for .h.
-- [`/src/<feature>/*.c,*.h`](src) look here for local .c/.h source implementing the contracts in `/include`.
-- [`/test/`](test) test suite.
-- [`/`](.) Makefile, license, basic readmes and build control files
+- [`/.libs/`] where the static library lives after it has been fully built.
+- [`/contrib/<proj>`] a place for misc non-core experiments, utils, demo-nodes etc.
+- [`/spec/*.md`] a place to begin documenting the Dogecoin Standard as we go.
+- [`/include/dogecoin/*.h`] provides header files for libdogecoin users, look here for .h.
+- [`/src/<feature>/*.c,*.h`] look here for local .c/.h source implementing the contracts in `/include`.
+- [`/test/`] test suite.
+- [`/`] Makefile, license, basic readmes and build control files
 
 The documentation has many helpful resources regarding setup and usage of Libdogecoin, along with some educational content on the specifics of Dogecoin protocols. Their contents are listed below:
 
@@ -170,7 +170,7 @@ Using Libdogecoin in your own project is very simple! Once the library is built,
 
 The following instructions show how to build and integrate libdogecoin under Linux, This will vary somewhat for other operating systems; but the process itself should be roughly analogous.
 
-In addition to the following instructions we've created an [example file](/contrib/examples/example.c) that contains functions stopping at version `0.1.2` which is found in `/contrib/examples/example.c`.
+In addition to the following instructions we've created an example file that contains functions stopping at the latest version which is found in `/contrib/examples/example.c`.
 
 To compile that example with `gcc`, first build libdogecoin so the resulting `.a` file will be found in `/.libs` and execute:
 

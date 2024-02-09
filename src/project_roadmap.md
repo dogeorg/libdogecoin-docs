@@ -23,7 +23,7 @@ and solve the problems of library design, building effective language wrappers e
 
 ![Stage 2 Diagram](/diagrams/libdogecoin-stage2.png)
 
-Stage two makes use of the low level building blocks we've delivered by combinging
+Stage two makes use of the low level building blocks we've delivered by combining
 them into higher level components that are needed to build wallets and nodes. This
 is where we deliver the parts needed for other members of the community to cobble 
 together operational doge projects.
