@@ -1,6 +1,24 @@
 [book]
+title = "Libdogecoin, a clean C library of Dogecoin building blocks"
+description = "Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C library (and series of bindings to popular languages) which will allow anyone to build a Dogecoin compliant product, without needing to worry about the deeper, complicated specifics of the crypto functions."
 authors = ["qlpqlp"]
 language = "en"
-multilingual = false
 src = "src"
-title = "Libdogecoin, a clean C library of Dogecoin building blocks"
+
+[output.html]
+mathjax-support = true
+git-repository-url = "https://github.com/dogecoinfoundation/libdogecoin/tree/main/"
+edit-url-template = "https://github.com/dogeorg/libdogecoin-docs/edit/main/{path}"
+
+[output.html.playground]
+editable = true
+line-numbers = true
+
+[output.html.search]
+limit-results = 20
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 2
+boost-paragraph = 1
+expand = true
+heading-split-level = 2
