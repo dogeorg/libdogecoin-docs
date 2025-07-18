@@ -210,4 +210,4 @@ make -C depends HOST=<target_architecture>
 make check
 ```
 
-It is important to run `make check` after cross compiling to make sure that everything is running properly for your architecture. For some guidance on which configuration flags to run, you can refer to our [CI test file](https://github.com/dogecoinfoundation/libdogecoin/blob/main/.github/workflows/ci.yml).
+It is important to run `make check` after cross compiling to make sure that everything is running properly for your architecture. For some guidance on which configuration flags to run, you can refer to our [CI test file](../.github/workflows/ci.yml).
