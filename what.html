@@ -1,0 +1,389 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Introduction - Libdogecoin, a clean C library of Dogecoin building blocks</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C library (and series of bindings to popular languages) which will allow anyone to build a Dogecoin compliant product, without needing to worry about the deeper, complicated specifics of the crypto functions.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Libdogecoin, a clean C library of Dogecoin building blocks</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/dogecoinfoundation/libdogecoin/tree/main/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/dogeorg/libdogecoin-docs/edit/main/src/what.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="libdogecoin-a-clean-c-library-of-dogecoin-building-blocks"><a class="header" href="#libdogecoin-a-clean-c-library-of-dogecoin-building-blocks">Libdogecoin, a clean C library of Dogecoin building blocks</a></h1>
+<p><img src="images/libdogecoin-logo.png" alt="The LibDogecoin Logo" width="60%" style="margin-left: 20%;"/></p>
+<p><a href="https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ci.yml"><img src="https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ci.yml/badge.svg" alt="CI" /></a><a href="https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ql.yml"><img src="https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ql.yml/badge.svg" alt="CodeQL" /></a></p>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
+<ul>
+<li><a href="#libdogecoin-a-clean-c-library-of-dogecoin-building-blocks">Libdogecoin, a clean C library of Dogecoin building blocks.</a>
+<ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#what-is-libdogecoin">What is Libdogecoin?</a>
+<ul>
+<li><a href="#advantages-of-libdogecoin">Advantages of Libdogecoin</a></li>
+<li><a href="#current-features">Current features</a></li>
+</ul>
+</li>
+<li><a href="#why-c">Why C?</a></li>
+<li><a href="#dogecoin-standardspec">Dogecoin Standard/Spec</a></li>
+<li><a href="#code-of-shibes">Code of Shibes</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#repository-navigation">Repository Navigation</a></li>
+<li><a href="#quick-start">Quick Start</a>
+<ul>
+<li><a href="#preliminary">Preliminary</a></li>
+<li><a href="#building">Building</a></li>
+<li><a href="#integration">Integration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="what-is-libdogecoin"><a class="header" href="#what-is-libdogecoin">What is Libdogecoin?</a></h2>
+<p>Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C library (and series of bindings to popular languages) which will allow anyone to build a Dogecoin compliant product, without needing to worry about the deeper, complicated specifics of the crypto functions.</p>
+<p>Libdogecoin is here to make crypto development <strong>simple</strong>, <strong>clean</strong>, and <strong>fun</strong>!</p>
+<p>This will be a pure library, providing a set of callable functions to implement in external projects, but not a ‘runnable’ node facility. Although we expect building a Dogecoin Node will be a useful test and early outcome, that will live in another repository.</p>
+<p>It is intended that connecting the bits together into an engine be done at the level above, via the networking libraries of the host language.</p>
+<p><a href="project_roadmap.html">See the Project Roadmap for more on the planned stages of development</a></p>
+<p><a href="https://foundation.dogecoin.com/trailmap/libdogecoin/">See the Dogecoin Trailmap for more on libdogecoin</a></p>
+<h3 id="advantages-of-libdogecoin"><a class="header" href="#advantages-of-libdogecoin">Advantages of Libdogecoin</a></h3>
+<ul>
+<li>No dependencies in case no p2p network client is required (only dependencies are <a href="https://github.com/bitcoin-core/secp256k1">libsecp256k1</a> added as git subtree and optionally (enabled by default) <a href="https://www.gnu.org/software/libunistring/">libunistring</a> for mnemonics)</li>
+<li>The only dependency for the p2p network client is <a href="https://github.com/libevent/libevent">libevent</a> (very portable)</li>
+<li>optimized for MCU and low mem environments</li>
+<li>~full test coverage</li>
+<li>Best effort to to be mem leak free (manual valgrind check per supported platform)</li>
+</ul>
+<h3 id="current-features"><a class="header" href="#current-features">Current features</a></h3>
+<ul>
+<li>Generating and storing private and public keys</li>
+<li>ECDSA secp256k1 signing and verification (through <a href="https://github.com/bitcoin-core/secp256k1">libsecp256k1</a> included as git subtree)</li>
+<li>Generate recoverable signatures (and recover pubkey from signatures)</li>
+<li>BIP32 hierarchical deterministic key derivation</li>
+<li>Transaction generation, manipulation, signing and ser-/deserialization including P2PKH, P2SH, multisig</li>
+<li>Address generation</li>
+<li>Base58check encoding</li>
+<li>Native implementation of SHA256, SHA512, SHA512_HMAC, RIPEMD-160 including NIST testvectors</li>
+<li>Native constant time AES (+256CBC) cipher implementation including NIST testvectors</li>
+<li>Event based dogecoin P2P client capable of connecting to multiple nodes in a single thread (requires <a href="https://github.com/libevent/libevent">libevent</a>)</li>
+</ul>
+<h2 id="why-c"><a class="header" href="#why-c">Why C?</a></h2>
+<p>The Dogecoin Core project is written in C++, why move to C? This is a good question.</p>
+<p>The Dogecoin Core project was inherited when Dogecoin was originally forked and makes use of some reasonable heavy C++ libraries that add complexity to the build process, as well as cognitive complexity for new developers.</p>
+<p>The desire is to provide a simple to learn library with few external dependencies that can be built with relatively little setup by new developers.  Furthermore the aim of providing wrappers for a number of higher-level languages leans strongly toward either C or RUST from a binding/support perspective, and we believe C still has significantly more support when writing bindings for a wide variety of other languages. C is better supported on embedded/lightweight platforms, with the goal of moving dogecoin beyond the realm of the PC; and actually prepares (constrains it) to be re-coded/adapted in other languages as specific OO and memory mgmt functions of C++ aren't required. Wrappers that previously lived here in this repository have been moved to their own respective projects (python and go bindings) found at <a href="https://github.com/dogeorg">@dogeorg</a>.</p>
+<h2 id="dogecoin-standardspec"><a class="header" href="#dogecoin-standardspec">Dogecoin Standard/Spec</a></h2>
+<p>During the process of extracting the fundamentals from the Dogecoin Core Wallet (reference implementation) we aim to document ‘how Dogecoin works’ as a suite of tests and documents we are calling the Dogecoin Standard.</p>
+<p>See <code>/spec</code></p>
+<p>By doing this we will be able to verify that the Libdogecoin implementation of Dogecoin’s internals is accurate to the OG wallet, and thus provide a mechanism for any future Dogecoin implementations to verify compliance with the Dogecoin Network.</p>
+<h2 id="code-of-shibes"><a class="header" href="#code-of-shibes">Code of Shibes</a></h2>
+<p>By contributing to this repository you agree to be a basic human being, please see <a href="https://github.com/dogecoinfoundation/libdogecoin/blob/main/CONDUCT.md"><code>CONDUCT.md</code></a></p>
+<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
+<p><em><strong>TL;DR</strong></em>: Initially during the early phase of development we'll keep this basic, after the library starts to become a dependency for projects in real-world active use this will likely change and the API will become considerably more extensive.</p>
+<ul>
+<li>Express interest and get added to the libdogecoin team on GitHub
+and join the conversation in the Foundation discord server.</li>
+<li><strong>Branch/PRs in this repository (see above point for access)</strong></li>
+<li><strong>Ensure tests pass and coverage is maintained</strong></li>
+<li><strong>Update libdogecoin.h in [<code>/include/</code>] and example.c in [<code>/contrib/examples/</code>]</strong></li>
+<li>1 approval from another contributor required to merge to main</li>
+<li>Don't introduce dependencies without discussion (MIT); our aim is to have as few dependencies as possible, with the ideal (possibly unachievable) goal of having none beyond standard c libs and a compiler.</li>
+<li>Collaborate before you innovate! (this means, discuss what you're working on where everyone can see, before submitting a change.)</li>
+<li>Have fun &lt;3</li>
+</ul>
+<h2 id="repository-navigation"><a class="header" href="#repository-navigation">Repository Navigation</a></h2>
+<p>Advice on how to navigate this repository:</p>
+<ul>
+<li>[<code>/.libs/</code>] where the static library lives after it has been fully built.</li>
+<li>[<code>/contrib/&lt;proj&gt;</code>] a place for misc non-core experiments, utils, demo-nodes etc.</li>
+<li>[<code>/spec/*.md</code>] a place to begin documenting the Dogecoin Standard as we go.</li>
+<li>[<code>/include/dogecoin/*.h</code>] provides header files for libdogecoin users, look here for .h.</li>
+<li>[<code>/src/&lt;feature&gt;/*.c,*.h</code>] look here for local .c/.h source implementing the contracts in <code>/include</code>.</li>
+<li>[<code>/test/</code>] test suite.</li>
+<li>[<code>/</code>] Makefile, license, basic readmes and build control files</li>
+</ul>
+<p>The documentation has many helpful resources regarding setup and usage of Libdogecoin, along with some educational content on the specifics of Dogecoin protocols. Their contents are listed below:</p>
+<ul>
+<li><a href="address.html"><code>address.md</code></a> Full description of dogecoin addresses and the Libdogecoin Essential Address API.</li>
+<li><a href="getting_started.html"><code>getting_started.md</code></a> Detailed instructions for building, installing, and implementing the library in your project.</li>
+<li><a href="project_roadmap.html"><code>project_roadmap.md</code></a> Our plan for the future of Libdogecoin (with pictures!).</li>
+<li><a href="tools.html"><code>tools.md</code></a> Guidance on how to use provided helper scripts and tools like <code>such</code> and <code>sendtx</code>.</li>
+<li><a href="transaction.html"><code>transaction.md</code></a> Full description of dogecoin transactions and the Libdogecoin Essential Transaction API.</li>
+</ul>
+<h2 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h2>
+<p>For more detailed build and installation instructions, please refer to <a href="getting_started.html"><code>getting_started.md</code></a></p>
+<h3 id="preliminary"><a class="header" href="#preliminary">Preliminary</a></h3>
+<p>Before attempting to build, make sure all the necessary dependencies for your architecture are installed.</p>
+<p><em>Debian/Ubuntu</em></p>
+<pre><code class="language-_Debian/Ubuntu_">sudo apt-get install autoconf automake libtool build-essential libevent-dev libunistring-dev
+</code></pre>
+<p><em>MacOS</em></p>
+<pre><code class="language-_MacOS_">xcode_select --install
+sudo chown -R $(whoami) $(brew --prefix)/*
+</code></pre>
+<p><em>Other</em> - Please submit a pull request to add dependencies for your system, or update these.</p>
+<h3 id="building"><a class="header" href="#building">Building</a></h3>
+<p><em>Debian / Ubuntu</em></p>
+<p>To build the full library, including the <code>such</code> and <code>sendtx</code> CLI tools, run the following autoconf commands:</p>
+<pre><code class="language-_Debian / Ubuntu_">./autogen.sh
+./configure
+make
+</code></pre>
+<p>To build the pure library without net support, add the following flags to the <code>./configure</code> command:</p>
+<pre><code class="language-_Debian / Ubuntu_">./autogen.sh
+./configure --disable-net --disable-tools
+make
+</code></pre>
+<h4 id="cmake"><a class="header" href="#cmake">CMake</a></h4>
+<p>To build with <code>cmake</code> run the following from the project root directory:</p>
+<pre><code class="language-cmake">mkdir build
+cd build
+cmake ..
+cmake --build .
+</code></pre>
+<h3 id="integration"><a class="header" href="#integration">Integration</a></h3>
+<p>Using Libdogecoin in your own project is very simple! Once the library is built, you will see the resulting <code>libdogecoin.a</code> file in the <code>/.libs</code> folder. Additionally, you will want to locate the <code>libdogecoin.h</code> header file in the <code>/include/dogecoin</code> folder. Move both of these files into your project directory, or somewhere where the compiler can find them. In your source code which uses the Libdogecoin API, make sure to include this <code>libdogecoin.h</code> header at the top of your code.</p>
+<p>The following instructions show how to build and integrate libdogecoin under Linux, This will vary somewhat for other operating systems; but the process itself should be roughly analogous.</p>
+<p>In addition to the following instructions we've created an example file that contains functions stopping at the latest version which is found in <code>/contrib/examples/example.c</code>.</p>
+<p>To compile that example with <code>gcc</code>, first build libdogecoin so the resulting <code>.a</code> file will be found in <code>/.libs</code> and execute:</p>
+<pre><code class="language-c">gcc ./contrib/examples/example.c ./.libs/libdogecoin.a -I./include/dogecoin -L./.libs -ldogecoin -lunistring -o example
+</code></pre>
+<p>then run the example: <code>./example</code>. Otherwise continue with something like the folowing:</p>
+<p><em>main.c:</em></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include "libdogecoin.h"
+
+int main() {
+    // your code here...
+}
+</code></pre>
+<p>Once you are ready to compile, the <code>libdogecoin.a</code> file must be linked to your source code, along with <code>libevent</code> and <code>libunistring</code>. The resulting compilation command will looks similar to this:</p>
+<pre><code class="language-_Debian / Ubuntu_">gcc main.c -ldogecoin -levent -lunistring -o myprojectname
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next prefetch" href="getting_started.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next prefetch" href="getting_started.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="editor.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

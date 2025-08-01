@@ -1,0 +1,844 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Enclaves - Libdogecoin, a clean C library of Dogecoin building blocks</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C library (and series of bindings to popular languages) which will allow anyone to build a Dogecoin compliant product, without needing to worry about the deeper, complicated specifics of the crypto functions.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Libdogecoin, a clean C library of Dogecoin building blocks</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/dogecoinfoundation/libdogecoin/tree/main/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/dogeorg/libdogecoin-docs/edit/main/src/enclaves.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="secure-enclaves-integration-with-libdogecoin"><a class="header" href="#secure-enclaves-integration-with-libdogecoin">Secure Enclaves Integration with libdogecoin</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>This document discusses our research on enhancing the security of <strong>libdogecoin</strong> key management operations using <strong>Intel SGX</strong> and <strong>ARM TrustZone</strong> as secure enclaves. By performing key management within secure enclaves, we significantly reduce the risk of key exposure, thereby increasing the overall security of Dogecoin transactions. This document includes an overview of the research, build instructions for the key management enclaves, and a step-by-step tutorial on using the host command line interface to interact with the enclaves in both <strong>OP-TEE</strong> and <strong>OpenEnclave</strong> environments. Additionally, we outline critical vulnerabilities in Trusted Execution Environments (TEEs) and provide recommendations for mitigating these risks.</p>
+<p>This document covers mnemonic generation, public key derivation, address generation, message signing, and transaction signing as part of secure enclave operations.</p>
+<h2 id="what-are-secure-enclaves"><a class="header" href="#what-are-secure-enclaves">What are Secure Enclaves?</a></h2>
+<p>Secure enclaves are isolated environments that provide a secure space for sensitive operations. These enclaves are isolated from the rest of the system, ensuring that sensitive data and operations are protected from unauthorized access. <strong>Secure enclaves</strong> within a processor can be implemented using different technologies such as <strong>TEEs</strong>, hardware security modules (<strong>HSMs</strong>), and virtualization-based solutions. To ensure a robust defense, secure enclaves must guarantee <strong>confidentiality</strong>, <strong>integrity</strong>, and <strong>availability</strong> for sensitive operations. However, enclaves are not a silver bullet and must be integrated within a broader security strategy.</p>
+<p>Compared to hardware security modules (HSMs) and trusted platform modules (TPMs), secure enclaves provide in-CPU isolation, which makes them ideal for high-performance cryptographic operations without requiring external hardware.</p>
+<h2 id="why-use-secure-enclaves"><a class="header" href="#why-use-secure-enclaves">Why Use Secure Enclaves?</a></h2>
+<p>Secure enclaves offer several advantages for key management operations:</p>
+<ul>
+<li><strong>Isolation</strong>: Enclaves provide a secure environment that is isolated from the rest of the system, protecting sensitive data and operations.</li>
+<li><strong>Confidentiality</strong>: Enclaves ensure that sensitive data is encrypted and protected from unauthorized access.</li>
+<li><strong>Integrity</strong>: Enclaves guarantee the integrity of sensitive operations, ensuring that they have not been tampered with.</li>
+<li><strong>Remote Attestation</strong>: Enclaves can be remotely attested to verify their integrity and authenticity to external parties.</li>
+<li><strong>Key Management</strong>: Enclaves can securely generate, store, and manage cryptographic keys, protecting them from unauthorized access.</li>
+</ul>
+<p>By performing key operations within secure enclaves, developers can enhance the security of their applications and protect sensitive data from unauthorized access.</p>
+<h2 id="secure-enclaves-in-libdogecoin"><a class="header" href="#secure-enclaves-in-libdogecoin">Secure Enclaves in libdogecoin</a></h2>
+<h3 id="key-concepts"><a class="header" href="#key-concepts">Key Concepts</a></h3>
+<p>In this section, we define some key concepts central to secure enclaves and their implementation.</p>
+<ul>
+<li><strong>Host</strong>: The normal world that interacts with the enclave.</li>
+<li><strong>Enclave</strong>: The secure world within the CPU where sensitive operations are performed.</li>
+<li><strong>Trusted Execution Environment (TEE)</strong>: A hardware-based secure environment that protects sensitive operations from external interference and tampering.</li>
+<li><strong>ECALLS</strong>: Enclave calls used in <strong>OpenEnclave</strong> that allow the host to interact with the secure enclave.</li>
+<li><strong>SMCs</strong>: Secure Monitor Calls that manage communication between the normal and secure worlds in <strong>ARM TrustZone</strong>.</li>
+<li><strong>Remote Attestation</strong>: The process of verifying the integrity and authenticity of an enclave to a remote party.</li>
+</ul>
+<p>By performing key operations such as <strong>seedphrase generation</strong>, <strong>public key derivation</strong>, and <strong>message and transaction signing</strong> within these enclaves, we can greatly reduce the risk of private key exposure, even in the event of a host system compromise.</p>
+<h2 id="what-are-trusted-execution-environments-tees"><a class="header" href="#what-are-trusted-execution-environments-tees">What are Trusted Execution Environments (TEEs)?</a></h2>
+<p>TEEs are secure environments within a processor that provide a trusted execution domain for sensitive operations. They ensure that sensitive data and operations are protected from unauthorized access and tampering. TEEs can be implemented using hardware-based security technologies such as <strong>Intel SGX</strong>, <strong>ARM TrustZone</strong>, or other vendor-specific technologies. While they offer significant advantages in terms of isolating critical operations, TEEs also come with their own set of challenges, particularly in terms of addressing vulnerabilities and maintaining performance.</p>
+<h3 id="contrast-between-intel-sgx-and-arm-trustzone"><a class="header" href="#contrast-between-intel-sgx-and-arm-trustzone">Contrast Between Intel SGX and ARM TrustZone</a></h3>
+<div class="table-wrapper"><table><thead><tr><th><strong>Criteria</strong></th><th><strong>Intel SGX (OpenEnclave)</strong></th><th><strong>ARM TrustZone (OP-TEE)</strong></th></tr></thead><tbody>
+<tr><td><strong>Target Platform</strong></td><td>Primarily x86 server-class CPUs</td><td>Primarily ARM mobile and embedded devices</td></tr>
+<tr><td><strong>Security Model</strong></td><td>Memory encryption and isolated execution</td><td>Secure world execution isolated from normal world</td></tr>
+<tr><td><strong>Key Vulnerabilities</strong></td><td>Foreshadow, Plundervolt, SGAxe</td><td>CVE-2021-34387, CVE-2020-16273</td></tr>
+<tr><td><strong>Performance Overhead</strong></td><td>Higher, especially for I/O and large memory use</td><td>Lower, better for embedded and mobile devices</td></tr>
+<tr><td><strong>Use Cases</strong></td><td>Server applications, enterprise security</td><td>IoT, mobile devices, embedded systems</td></tr>
+</tbody></table>
+</div>
+<h2 id="hardware-and-software"><a class="header" href="#hardware-and-software">Hardware and Software</a></h2>
+<h3 id="intel-sgx-and-openenclave"><a class="header" href="#intel-sgx-and-openenclave">Intel SGX and OpenEnclave</a></h3>
+<p>Intel SGX (Software Guard Extensions) is a hardware-based security technology that creates isolated TEEs within some Intel CPUs. OpenEnclave is an open-source SDK that enables developers to build host and enclave applications that run on Intel SGX. SGX works by partitioning secure memory regions within the CPU that are isolated from the rest of the system, ensuring that sensitive data is protected from unauthorized access. These memory regions are encrypted and authenticated, providing a secure environment for cryptographic operations.</p>
+<p>OpenEnclave offers an interface for developing applications that run within SGX enclaves, enabling developers to build secure applications that protect sensitive data and operations. The host interacts with the enclave using ECALLS, allowing the enclave to perform cryptographic operations securely. Remote attestation is used to verify the integrity of the enclave to remote parties, ensuring that the enclave has not been tampered with.</p>
+<h3 id="arm-trustzone-and-op-tee"><a class="header" href="#arm-trustzone-and-op-tee">ARM TrustZone and OP-TEE</a></h3>
+<p>ARM TrustZone is another hardware-based security technology that creates TEEs within ARM CPUs. OP-TEE (Open Portable Trusted Execution Environment) is an open-source software framework that facilitates the development of applications running within ARM TrustZone enclaves. TrustZone creates a secure world and a normal world within the CPU, isolating sensitive operations from the rest of the system. The processor switches between the secure and normal worlds, ensuring that sensitive operations are performed securely. Memory is partitioned between the secure and normal worlds using page tables, protecting sensitive data from unauthorized access.</p>
+<p>OP-TEE provides a secure world OS for cryptographic operations in TrustZone firmware, ensuring that private keys and sensitive data are protected from unauthorized access. The host interacts with the secure world using SMCs, allowing the secure enclave to perform cryptographic operations securely. OP-TEE is widely used in IoT devices, mobile phones, and embedded systems to protect sensitive data and operations.</p>
+<h2 id="key-management-enclaves"><a class="header" href="#key-management-enclaves">Key Management Enclaves</a></h2>
+<h3 id="visual-representation-simplified"><a class="header" href="#visual-representation-simplified">Visual Representation (Simplified)</a></h3>
+<pre><code class="language-text">+-----------------------------------------+               +-----------------------------------------+
+| Host                                    |               | Host                                    |
+|                                         |               |                                         |
+|  +-----------------------------------+  |               |  +-----------------------------------+  |
+|  |      command line interface       |  |               |  |      command line interface       |  |
+|  |                                   |  |               |  |                                   |  |
+|  |  +-----------------------------+  |  |               |  |  +-----------------------------+  |  |
+|  |  |         libdogecoin         |  |  |               |  |  |         libdogecoin         |  |  |
+|  +-----------------------------------+  |               |  +-----------------------------------+  |
+|  |         OpenEnclave Host          |  |               |  |           OP-TEE Client           |  |
++-----------------------------------------+               +-----------------------------------------+
+|                Linux OS                 |               |                Linux OS                 |
++-----------------------------------------+               +-----------------------------------------+
+| Enclave            ^                    |               | Enclave            ^                    |
+|                 ECALLS                  |               |                   SMCs                  |
+|                    |                    |               |                    |                    |
+|        Messages and Transactions        |               |        Messages and Transactions        |
+|        Public Keys and Addresses        |               |        Public Keys and Addresses        |
+|                    |                    |               |                    |                    |
+|                    v                    |               |                    v                    |
+|  +-----------------------------------+  |               |  +-----------------------------------+  |
+|  |          Key Management           |  |               |  |          Key Management           |  |
+|  |  - Seedphrase Generation          |  |               |  |  - Seedphrase Generation          |  |
+|  |  - Public Key Generation          |  |               |  |  - Public Key Generation          |  |
+|  |  - Address Generation             |  |               |  |  - Address Generation             |  |
+|  |  - Sign Message                   |  |               |  |  - Sign Message                   |  |
+|  |  - Sign Transaction               |  |               |  |  - Sign Transaction               |  |
+|  |                                   |  |               |  |                                   |  |
+|  |  +-----------------------------+  |  |               |  |  +-----------------------------+  |  |
+|  |  |         libdogecoin         |  |  |               |  |  |         libdogecoin         |  |  |
++-----------------------------------------+               +-----------------------------------------+
+|              OpenEnclave                |               |       OP-TEE OS + Trusted Firmware      |
++-----------------------------------------+               +-----------------------------------------+
+|               Intel SGX                 |               |             ARMv8 TrustZone             |
++-----------------------------------------+               +-----------------------------------------+
+</code></pre>
+<h3 id="key-management-operations"><a class="header" href="#key-management-operations">Key Management Operations</a></h3>
+<p>The secure enclave handles the following operations:</p>
+<ul>
+<li><strong>Seedphrase Generation</strong>: Protecting the creation of seedphrases for wallet recovery.</li>
+<li><strong>Public Key Generation</strong>: Deriving public keys in the enclave, ensuring private keys are never exposed.</li>
+<li><strong>Address Generation</strong>: Generating secure Dogecoin addresses within the enclave.</li>
+<li><strong>Sign Message/Transaction</strong>: Ensuring the integrity and authenticity of signed messages and transactions.</li>
+</ul>
+<h3 id="limitations-and-assumptions"><a class="header" href="#limitations-and-assumptions">Limitations and Assumptions</a></h3>
+<p>While secure enclaves provide powerful protection, they are <strong>not infallible</strong>. The <strong>Foreshadow</strong> vulnerability is a good example of how attackers can bypass enclave protections. Furthermore, the security model assumes that the host environment is insecure, relying entirely on the enclave for protection. Developers should adopt a <strong>defense-in-depth</strong> strategy, using <strong>secure coding practices</strong> and <strong>regular security audits</strong> to complement enclave security.</p>
+<h3 id="performance-trade-offs"><a class="header" href="#performance-trade-offs">Performance trade-offs</a></h3>
+<p>Secure enclaves introduce performance overhead due to the encryption and isolation mechanisms they employ. For example, <strong>Intel SGX</strong> enclaves have higher performance overhead compared to <strong>ARM TrustZone</strong> enclaves, especially for I/O and large memory use. <strong>ARM TrustZone</strong> enclaves are better suited for embedded and mobile devices due to their lower performance impact. However key management operations are typically not performance-critical, making secure enclave protection a worthwhile trade-off for the increased security it provides.</p>
+<h3 id="secure-storage"><a class="header" href="#secure-storage">Secure Storage</a></h3>
+<p>Mnemonic seedphrases are securely encrypted by the enclave to prevent unauthorized access. Encrypted data should still be backed up using the <strong>rule of three</strong>: store copies in three distinct locations to ensure recovery.</p>
+<h3 id="time-based-one-time-password-totp-authentication"><a class="header" href="#time-based-one-time-password-totp-authentication">Time-Based One-Time Password (TOTP) Authentication</a></h3>
+<p>TOTP authentication using a <strong>YubiKey</strong> further enhances security by ensuring that access to sensitive enclave operations is restricted to authorized users. When combined with password-based authentication, TOTP provides an additional layer of security. This two-factor authentication approach increases security during enclave operations, preventing unauthorized key usage even if the host environment is compromised.</p>
+<h2 id="future-research"><a class="header" href="#future-research">Future Research</a></h2>
+<p>To further improve the security and functionality of Dogecoin’s ecosystem, we recommend exploring <strong>Remote Attestation</strong> to validate the integrity of enclaves in distributed systems. This would allow external parties to verify the authenticity of enclaves, ensuring that they have not been tampered with. Intel SGX supports remote attestation, while ARM TrustZone can be extended to include this feature.</p>
+<p>Performance optimizations for secure enclaves are another area of interest, as reducing overhead can make enclaves more practical for a wider range of applications. Additonal analysis is needed to evaluate the performance impact of secure enclaves on key management operations at scale.</p>
+<p>Additionally, alternative secure technologies like <strong>AMD SEV</strong> and <strong>RISC-V</strong> should be explored to broaden the options available for TEE-based applications. These technologies offer different security models and performance characteristics that may be better suited to specific use cases.</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://software.intel.com/en-us/sgx">Intel SGX</a></li>
+<li><a href="https://www.arm.com/solutions/security-on-arm/trustzone">ARM TrustZone</a></li>
+<li><a href="https://www.openenclave.io/">OpenEnclave</a></li>
+<li><a href="https://optee.readthedocs.io/en/latest/">OP-TEE</a></li>
+</ul>
+<h2 id="tee-vulnerabilities"><a class="header" href="#tee-vulnerabilities">TEE Vulnerabilities</a></h2>
+<p>It is crucial to keep systems up-to-date with the latest security fixes and patches to mitigate the risks associated with any vulnerabilities. Regularly applying security patches and following best practices for secure enclave development can help protect sensitive data and operations. Below are some recent vulnerabilities that have been discovered in Intel SGX, ARM TrustZone, OpenEnclave, and OP-TEE. It is essential to stay informed about these vulnerabilities and take appropriate measures to address them.</p>
+<p><strong>Intel SGX:</strong>
+Several vulnerabilities have been discovered in Intel SGX:</p>
+<ol>
+<li>
+<p><strong>Foreshadow (CVE-2018-3615):</strong> This vulnerability allows attackers to access sensitive information stored in SGX enclaves. Details can be found in the <a href="https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00161.html">Intel Security Advisory</a>.</p>
+</li>
+<li>
+<p><strong>Plundervolt (CVE-2019-11157):</strong> This vulnerability exploits the CPU's undervolting features to breach SGX enclave protections. More information is available in the <a href="https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00289.html">Intel Security Advisory</a>.</p>
+</li>
+<li>
+<p><strong>SGAxe (CVE-2020-0551):</strong> This vulnerability allows side-channel attacks to extract sensitive information from SGX enclaves. Refer to the <a href="https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00334.html">Intel Security Advisory</a> for further details.</p>
+</li>
+</ol>
+<p><strong>ARM TrustZone:</strong>
+While many vulnerabilities related to ARM TrustZone tend to be vendor-specific or related to specific implementations, the core TrustZone architecture itself has also been associated with certain security concerns. Below are examples of both types:</p>
+<ol>
+<li>
+<p><strong>CVE-2021-34387:</strong> This vulnerability in the ARM TrustZone technology, on which Trusty is based, allows unauthorized write access to kernel code and data that is mapped as read-only, affecting the DRAM reserved for TrustZone. Further details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-34387">here</a>.</p>
+</li>
+<li>
+<p><strong>CVE-2021-33478:</strong> This issue affects Broadcom MediaxChange firmware, potentially allowing an unauthenticated attacker to achieve arbitrary code execution in the TrustZone TEE of an affected device. More information is available <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-33478">here</a>.</p>
+</li>
+<li>
+<p><strong>CVE-2021-29415:</strong> This vulnerability involves the ARM TrustZone CryptoCell 310 in Nordic Semiconductor nRF52840, allowing adversaries to recover private ECC keys during ECDSA operations. Details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-29415">here</a>.</p>
+</li>
+<li>
+<p><strong>CVE-2020-16273:</strong> This vulnerability in ARMv8-M processors' software stack selection mechanism can be exploited by a stack-underflow attack, allowing changes to the stack pointer from a non-secure application. More information is available <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-16273">here</a>.</p>
+</li>
+<li>
+<p><strong>CVE-2022-47549:</strong> This issue in OP-TEE, which is closely associated with ARM TrustZone, allows bypassing signature verification and installing malicious trusted applications via electromagnetic fault injections. More details are available <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-47549">here</a>.</p>
+</li>
+</ol>
+<p>It's important to recognize that while TrustZone provides a secure environment, its effectiveness is heavily dependent on how it is implemented and integrated with other system components. Architectural issues or specific use-case vulnerabilities may arise, emphasizing the need for rigorous security practices.</p>
+<p><strong>OpenEnclave:</strong>
+For vulnerabilities and security advisories related to OpenEnclave, refer to their <a href="https://github.com/openenclave/openenclave/security">GitHub security page</a>.</p>
+<p><strong>OP-TEE:</strong>
+For vulnerabilities and security advisories related to OP-TEE, refer to their <a href="https://github.com/OP-TEE/optee_os/security">GitHub security page</a>.</p>
+<p>To mitigate the risks associated with these vulnerabilities, it is essential to stay informed about the latest security advisories and best practices for secure enclave development. Regularly applying security patches and following secure coding practices can help protect sensitive data and operations from unauthorized access.</p>
+<h2 id="disclaimer"><a class="header" href="#disclaimer">Disclaimer</a></h2>
+<p>Enclaves are not a silver bullet. As a risk mitigation measure, enclaves can provide significant benefits in protecting sensitive data and operations. We encourage developers to explore secure enclaves and their potential benefits, but caution that they should be used as part of a comprehensive security strategy that includes other security measures such as secure coding practices and audits. Enclaves are not immune to vulnerabilities, and it is essential to stay informed about the latest security advisories and best practices for secure enclave development.</p>
+<h2 id="build-instructions"><a class="header" href="#build-instructions">Build Instructions</a></h2>
+<h3 id="building-op-tee-sdk-and-client"><a class="header" href="#building-op-tee-sdk-and-client">Building OP-TEE SDK and Client</a></h3>
+<p><strong>Dependencies</strong></p>
+<ul>
+<li>Ubuntu 20.04 or later</li>
+<li>Docker</li>
+<li>Libdogecoin</li>
+</ul>
+<pre><code class="language-sh">sudo apt-get install docker.io
+
+mkdir -p /doge
+cd /doge
+git clone https://github.com/dogecoinfoundation/libdogecoin.git
+cd libdogecoin
+</code></pre>
+<p>The SDK has several components and requires over 10GB of disk space to build. The build process can take over 30 minutes on a modern machine. Docker is used to build the SDK and client in a clean environment.</p>
+<h3 id="step-1-nanopc-building-op-tee-sdk-and-client"><a class="header" href="#step-1-nanopc-building-op-tee-sdk-and-client">Step 1 (NanoPC): Building OP-TEE SDK and Client</a></h3>
+<p>This command builds the latest SDK and client for NanoPC-T6 (nanopc-t6.xml).  When complete, the image will be located in <code>/doge/libdogecoin/optee/out/nanopc-t6.img</code>. Burn this image to an SD card to boot the NanoPC-T6. Connect an Ethernet cable, USB keyboard and HDMI to the NanoPC-T6 and power it on. The default IP address is configured using DHCP. Login as root via ssh (e.g. <code>ssh root@192.168.137.19</code>) or using the HDMI console.</p>
+<p><code>LINUX_MODULES=y</code> is used to build the Linux kernel modules. The <code>CFG_TEE_CORE_LOG_LEVEL=0</code> environment variable sets the log level to 0 (no logging). The <code>CFG_ATTESTATION_PTA=y</code> environment variable enables the attestation PTA. The <code>CFG_ATTESTATION_PTA_KEY_SIZE=1024</code> environment variable sets the attestation PTA key size to 1024 bits. The <code>CFG_WITH_USER_TA=y</code> environment variable enables user TAs. The <code>CFG_WITH_SOFTWARE_PRNG=n</code> environment variable enables the hardware PRNG.</p>
+<p>An RSA private key is generated and overwrites the default Trusted Application (TA) key. This key is used to sign the enclave binaries during development. In the Continuous Integration (CI) environment, an Actions secret is used. Subkeys are generated for testing purposes but are not used to sign the enclave binaries.</p>
+<pre><code class="language-sh">docker pull jforissier/optee_os_ci:qemu_check
+docker run -v "$(pwd):/src" -w /src jforissier/optee_os_ci:qemu_check /bin/bash -c "\
+    # Set up the environment and build the OP-TEE SDK
+    set -e &amp;&amp; \
+    apt update &amp;&amp; \
+    apt -y upgrade &amp;&amp; \
+    apt -y install libusb-1.0-0-dev swig python3-dev python3-setuptools e2tools &amp;&amp; \
+    curl https://storage.googleapis.com/git-repo-downloads/repo &gt; /bin/repo &amp;&amp; chmod a+x /bin/repo &amp;&amp; \
+    mkdir -p optee &amp;&amp; \
+    cd optee &amp;&amp; \
+    # repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml -b 4.0.0
+    repo init -u https://github.com/OP-TEE/manifest.git -m nanopc-t6.xml -b master &amp;&amp; \
+    export FORCE_UNSAFE_CONFIGURE=1 &amp;&amp; \
+    repo sync -j 4 --force-sync &amp;&amp; \
+    cd build &amp;&amp; \
+    make toolchains -j 4 &amp;&amp; \
+    export CFG_TEE_CORE_LOG_LEVEL=0 &amp;&amp; \
+    export CFG_ATTESTATION_PTA=y &amp;&amp; \
+    export CFG_ATTESTATION_PTA_KEY_SIZE=1024 &amp;&amp; \
+    export CFG_WITH_USER_TA=y &amp;&amp; \
+    export CFG_WITH_SOFTWARE_PRNG=n &amp;&amp; \
+
+    # Generate RSA private key and overwrite the default TA key
+    openssl genpkey -algorithm RSA -out rsa_private.pem -pkeyopt rsa_keygen_bits:2048 &amp;&amp; \
+    mv rsa_private.pem /src/optee/optee_os/keys/default_ta.pem &amp;&amp; \
+
+    # Generate subkeys
+    openssl genrsa -out /src/optee/optee_test/ta/top_level_subkey.pem &amp;&amp; \
+    openssl genrsa -out /src/optee/optee_test/ta/mid_level_subkey.pem &amp;&amp; \
+    openssl genrsa -out /src/optee/optee_test/ta/identity_subkey2.pem &amp;&amp; \
+
+    # Sign the top-level subkey with the root key
+    /src/optee/optee_os/scripts/sign_encrypt.py sign-subkey \
+        --uuid f04fa996-148a-453c-b037-1dcfbad120a6 \
+        --key /src/optee/optee_os/keys/default_ta.pem --in /src/optee/optee_test/ta/top_level_subkey.pem \
+        --out /src/optee/optee_test/ta/top_level_subkey.bin --max-depth 4 --name-size 64 \
+        --subkey-version 1 &amp;&amp; \
+
+    # Generate UUID for the mid-level subkey
+    /src/optee/optee_os/scripts/sign_encrypt.py subkey-uuid --in /src/optee/optee_test/ta/top_level_subkey.bin \
+        --name mid_level_subkey &amp;&amp; \
+
+    # Sign the mid-level subkey with the top-level subkey
+    /src/optee/optee_os/scripts/sign_encrypt.py sign-subkey \
+        --uuid 1a5948c5-1aa0-518c-86f4-be6f6a057b16 \
+        --key /src/optee/optee_test/ta/top_level_subkey.pem --subkey /src/optee/optee_test/ta/top_level_subkey.bin \
+        --name-size 64 --subkey-version 1 \
+        --name mid_level_subkey \
+        --in /src/optee/optee_test/ta/mid_level_subkey.pem --out /src/optee/optee_test/ta/mid_level_subkey.bin &amp;&amp; \
+
+    # Generate UUID for subkey1_ta
+    /src/optee/optee_os/scripts/sign_encrypt.py subkey-uuid --in /src/optee/optee_test/ta/mid_level_subkey.bin \
+        --name subkey1_ta &amp;&amp; \
+
+    # Sign the identity subkey2 with the root key
+    /src/optee/optee_os/scripts/sign_encrypt.py sign-subkey \
+        --uuid a720ccbb-51da-417d-b82e-e5445d474a7a \
+        --key /src/optee/optee_os/keys/default_ta.pem --in /src/optee/optee_test/ta/identity_subkey2.pem \
+        --out /src/optee/optee_test/ta/identity_subkey2.bin --max-depth 0 --name-size 0 \
+        --subkey-version 1 &amp;&amp; \
+
+    # Build and test the OP-TEE OS and client
+    # make -j 4 check
+    make LINUX_MODULES=y -j 4 &amp;&amp; \
+    cd /src &amp;&amp; \
+    [ ! -d optee_client ] &amp;&amp; git clone https://github.com/OP-TEE/optee_client.git &amp;&amp; \
+    cd optee_client &amp;&amp; \
+    mkdir -p build &amp;&amp; \
+    cd build &amp;&amp; \
+    export PATH=/src/optee/toolchains/aarch64/bin:$PATH &amp;&amp; \
+    export CC=aarch64-linux-gnu-gcc &amp;&amp; \
+    cmake .. -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_INSTALL_PREFIX=/src/optee/toolchains/aarch64 &amp;&amp; \
+    make -j 4 VERBOSE=1 &amp;&amp; \
+    make install"
+</code></pre>
+<h3 id="step-1-qemu-building-op-tee-sdk-and-client"><a class="header" href="#step-1-qemu-building-op-tee-sdk-and-client">Step 1 (QEMU): Building OP-TEE SDK and Client</a></h3>
+<p>This command builds the SDK (version 4.0.0) and client for ARMv8 QEMU emulation (qemu_v8.xml). For other platforms, change the manifest file in the <code>repo init</code> command accordingly. Replace <code>4.0.0</code> with the desired version and <code>qemu_v8.xml</code> with the desired platform. Refer to the <a href="https://optee.readthedocs.io/en/latest/building/index.html">OP-TEE documentation</a> for more information.</p>
+<pre><code class="language-sh">docker pull jforissier/optee_os_ci:qemu_check
+docker run -v "$(pwd):/src" -w /src jforissier/optee_os_ci:qemu_check /bin/bash -c "\
+    # Set up the environment and build the OP-TEE SDK
+    set -e &amp;&amp; \
+    apt update &amp;&amp; \
+    apt -y upgrade &amp;&amp; \
+    apt -y install libusb-1.0-0-dev swig python3-dev python3-setuptools e2tools &amp;&amp; \
+    curl https://storage.googleapis.com/git-repo-downloads/repo &gt; /bin/repo &amp;&amp; chmod a+x /bin/repo &amp;&amp; \
+    mkdir -p optee &amp;&amp; \
+    cd optee &amp;&amp; \
+    repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml -b 4.0.0 &amp;&amp; \
+    export FORCE_UNSAFE_CONFIGURE=1 &amp;&amp; \
+    repo sync -j 4 --force-sync &amp;&amp; \
+    patch -N -F 4 /src/optee/build/common.mk &lt; /src/src/optee/common.mk.patch &amp;&amp; \
+    cd build &amp;&amp; \
+    make toolchains -j 4 &amp;&amp; \
+    export CFG_TEE_CORE_LOG_LEVEL=0 &amp;&amp; \
+    export CFG_ATTESTATION_PTA=y &amp;&amp; \
+    export CFG_ATTESTATION_PTA_KEY_SIZE=1024 &amp;&amp; \
+    export CFG_WITH_USER_TA=y &amp;&amp; \
+
+    # Generate RSA private key and overwrite the default TA key
+    openssl genpkey -algorithm RSA -out rsa_private.pem -pkeyopt rsa_keygen_bits:2048 &amp;&amp; \
+    mv rsa_private.pem /src/optee/optee_os/keys/default_ta.pem &amp;&amp; \
+
+    # Generate subkeys
+    openssl genrsa -out /src/optee/optee_test/ta/top_level_subkey.pem &amp;&amp; \
+    openssl genrsa -out /src/optee/optee_test/ta/mid_level_subkey.pem &amp;&amp; \
+    openssl genrsa -out /src/optee/optee_test/ta/identity_subkey2.pem &amp;&amp; \
+
+    # Sign the top-level subkey with the root key
+    /src/optee/optee_os/scripts/sign_encrypt.py sign-subkey \
+        --uuid f04fa996-148a-453c-b037-1dcfbad120a6 \
+        --key /src/optee/optee_os/keys/default_ta.pem --in /src/optee/optee_test/ta/top_level_subkey.pem \
+        --out /src/optee/optee_test/ta/top_level_subkey.bin --max-depth 4 --name-size 64 \
+        --subkey-version 1 &amp;&amp; \
+
+    # Generate UUID for the mid-level subkey
+    /src/optee/optee_os/scripts/sign_encrypt.py subkey-uuid --in /src/optee/optee_test/ta/top_level_subkey.bin \
+        --name mid_level_subkey &amp;&amp; \
+
+    # Sign the mid-level subkey with the top-level subkey
+    /src/optee/optee_os/scripts/sign_encrypt.py sign-subkey \
+        --uuid 1a5948c5-1aa0-518c-86f4-be6f6a057b16 \
+        --key /src/optee/optee_test/ta/top_level_subkey.pem --subkey /src/optee/optee_test/ta/top_level_subkey.bin \
+        --name-size 64 --subkey-version 1 \
+        --name mid_level_subkey \
+        --in /src/optee/optee_test/ta/mid_level_subkey.pem --out /src/optee/optee_test/ta/mid_level_subkey.bin &amp;&amp; \
+
+    # Generate UUID for subkey1_ta
+    /src/optee/optee_os/scripts/sign_encrypt.py subkey-uuid --in /src/optee/optee_test/ta/mid_level_subkey.bin \
+        --name subkey1_ta &amp;&amp; \
+
+    # Sign the identity subkey2 with the root key
+    /src/optee/optee_os/scripts/sign_encrypt.py sign-subkey \
+        --uuid a720ccbb-51da-417d-b82e-e5445d474a7a \
+        --key /src/optee/optee_os/keys/default_ta.pem --in /src/optee/optee_test/ta/identity_subkey2.pem \
+        --out /src/optee/optee_test/ta/identity_subkey2.bin --max-depth 0 --name-size 0 \
+        --subkey-version 1 &amp;&amp; \
+
+    # Build and test the OP-TEE OS and client
+    make -j 4 check
+    cd /src &amp;&amp; \
+    [ ! -d optee_client ] &amp;&amp; git clone https://github.com/OP-TEE/optee_client.git &amp;&amp; \
+    cd optee_client &amp;&amp; \
+    mkdir -p build &amp;&amp; \
+    cd build &amp;&amp; \
+    export PATH=/src/optee/toolchains/aarch64/bin:$PATH &amp;&amp; \
+    export CC=aarch64-linux-gnu-gcc &amp;&amp; \
+    cmake .. -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_INSTALL_PREFIX=/src/optee/toolchains/aarch64 &amp;&amp; \
+    make -j 4 VERBOSE=1 &amp;&amp; \
+    make install"
+</code></pre>
+<h3 id="step-2-qemu-or-nanopc-building-op-tee-libdogecoin-key-manager-enclave"><a class="header" href="#step-2-qemu-or-nanopc-building-op-tee-libdogecoin-key-manager-enclave">Step 2 (QEMU or NanoPC): Building OP-TEE Libdogecoin Key Manager Enclave</a></h3>
+<p>This command builds the OP-TEE Libdogecoin Key Manager Enclave for QEMU ARMv8 or NanoPC-T6. The enclave is built using the OP-TEE SDK and client. The enclave binary is located in <code>/doge/libdogecoin/optee/out/bin/libdogecoin.img</code>.</p>
+<p>Note that libdogecoin is built twice: once for the host and once for OP-TEE. The host build is used to build the host application, while the OP-TEE build is used to build the enclave. The CFLAGS=-Wp,-D_FORTIFY_SOURCE=0 flag is used to disable fortify source checks, which are not supported by OP-TEE.</p>
+<pre><code class="language-sh">docker run --privileged -v "$(pwd):/src" -w /src jforissier/optee_os_ci:qemu_check /bin/bash -c "\
+    # Set up the environment and build libdogecoin
+    apt-get update &amp;&amp; \
+    apt-get install -y autoconf automake libtool-bin build-essential curl python3 valgrind g++-aarch64-linux-gnu qemu-user-static qemu-user &amp;&amp; \
+
+    # Build libdogecoin for Host
+    make -j 4 -C depends HOST=aarch64-linux-gnu &amp;&amp; \
+    ./autogen.sh &amp;&amp; \
+    ./configure --prefix=/src/depends/aarch64-linux-gnu LIBS=-levent_pthreads --enable-static --disable-shared --enable-test-passwd HOST=aarch64-linux-gnu &amp;&amp; \
+    make -j 4 &amp;&amp; \
+    make install &amp;&amp; \
+
+    export PATH=/src/optee/toolchains/aarch64/bin:$PATH &amp;&amp; \
+    export CC=aarch64-linux-gnu-gcc &amp;&amp; \
+
+    # Build the Host
+    cd /src/src/optee/host &amp;&amp; \
+    make -j 4 \
+      CROSS_COMPILE=aarch64-linux-gnu- \
+      LDFLAGS=\"-L/src/optee/toolchains/aarch64/lib -L/src/depends/aarch64-linux-gnu/lib -ldogecoin -lunistring\" \
+      CFLAGS=\"-I/src/optee/toolchains/aarch64/include -I/src/src/optee/ta/include -I/src/depends/aarch64-linux-gnu/include -I/src/depends/aarch64-linux-gnu/include/ykpers-1 -I/src/depends/aarch64-linux-gnu/include/dogecoin\" &amp;&amp; \
+
+    # Build libdogecoin for OP-TEE
+    cd /src/ &amp;&amp; \
+    make -j 4 -C depends CFLAGS=-Wp,-D_FORTIFY_SOURCE=0 HOST=aarch64-linux-gnu &amp;&amp; \
+    ./configure --prefix=/src/depends/aarch64-linux-gnu LIBS=-levent_pthreads --enable-static --disable-shared --enable-test-passwd --enable-optee CFLAGS=-Wp,-D_FORTIFY_SOURCE=0 HOST=aarch64-linux-gnu &amp;&amp; \
+    make -j 4 &amp;&amp; \
+    make install &amp;&amp; \
+
+    # Build the Enclave
+    cd /src/src/optee/ta &amp;&amp; \
+    make -j 4 \
+      CROSS_COMPILE=aarch64-linux-gnu- \
+      LIBDIR=/src/depends/aarch64-linux-gnu/lib \
+      LDFLAGS=\"-L/src/depends/aarch64-linux-gnu/lib -ldogecoin -lunistring\" \
+      CFLAGS=\"-I/src/depends/aarch64-linux-gnu/include -I/src/depends/aarch64-linux-gnu/include/dogecoin\" \
+      PLATFORM=vexpress-qemu_armv8a \
+      TA_DEV_KIT_DIR=/src/optee/optee_os/out/arm/export-ta_arm64 &amp;&amp; \
+
+    # Create symbolic links and prepare image
+    mkdir -p /src/optee/out/bin &amp;&amp; \
+    cd /src/optee/out/bin &amp;&amp; \
+    ln -sf ../../linux/arch/arm64/boot/Image Image &amp;&amp; \
+    ln -sf ../../trusted-firmware-a/build/qemu/release/bl1.bin bl1.bin &amp;&amp; \
+    ln -sf ../../trusted-firmware-a/build/qemu/release/bl2.bin bl2.bin &amp;&amp; \
+    ln -sf ../../trusted-firmware-a/build/qemu/release/bl31.bin bl31.bin &amp;&amp; \
+    ln -sf ../../optee_os/out/arm/core/tee-header_v2.bin bl32.bin &amp;&amp; \
+    ln -sf ../../optee_os/out/arm/core/tee-pager_v2.bin bl32_extra1.bin &amp;&amp; \
+    ln -sf ../../optee_os/out/arm/core/tee-pageable_v2.bin bl32_extra2.bin &amp;&amp; \
+    ln -sf ../../edk2/Build/ArmVirtQemuKernel-AARCH64/RELEASE_GCC5/FV/QEMU_EFI.fd bl33.bin &amp;&amp; \
+    ln -sf ../../out-br/images/rootfs.cpio.gz rootfs.cpio.gz &amp;&amp; \
+    dd if=/dev/zero of=/src/optee/out/bin/libdogecoin.img bs=1M count=32 &amp;&amp; \
+    mkfs.ext4 /src/optee/out/bin/libdogecoin.img &amp;&amp; \
+    mkdir -p /src/optee/out-br/mnt &amp;&amp; \
+    mount -o loop /src/optee/out/bin/libdogecoin.img /src/optee/out-br/mnt &amp;&amp; \
+    cp /src/src/optee/ta/*.ta /src/optee/out-br/mnt &amp;&amp; \
+    cp /src/src/optee/host/optee_libdogecoin /src/optee/out-br/mnt &amp;&amp; \
+    cp /src/spvnode /src/optee/out-br/mnt &amp;&amp; \
+    cp /src/sendtx /src/optee/out-br/mnt &amp;&amp; \
+    cp /src/such /src/optee/out-br/mnt &amp;&amp; \
+    cp /src/tests /src/optee/out-br/mnt &amp;&amp; \
+    cp /src/bench /src/optee/out-br/mnt &amp;&amp; \
+    mkdir -p /src/optee/out-br/mnt/data/tee &amp;&amp; \
+    umount /src/optee/out-br/mnt &amp;&amp; \
+    exit"
+</code></pre>
+<h3 id="step-3-nanopc-running-op-tee-libdogecoin-key-manager-enclave"><a class="header" href="#step-3-nanopc-running-op-tee-libdogecoin-key-manager-enclave">Step 3 (NanoPC): Running OP-TEE Libdogecoin Key Manager Enclave</a></h3>
+<p>Use scp to copy the /doge/libdogecoin/optee/out/bin/libdogecoin.img to the NanoPC-T6 (e.g. <code>scp /doge/libdogecoin/optee/out/bin/libdogecoin.img root@192.168.137.19:/root/</code>). Then, SSH into the NanoPC-T6 and run the following commands:</p>
+<pre><code class="language-sh">mkdir /media/libdogecoin
+mount /root/libdogecoin.img /media/libdogecoin
+cd /media/libdogecoin
+cp /media/libdogecoin/62d95dc0-7fc2-4cb3-a7f3-c13ae4e633c4.ta /lib/optee_armtz/
+./optee_libdogecoin -c generate_mnemonic
+</code></pre>
+<h3 id="step-3-qemu-running-op-tee-libdogecoin-key-manager-enclave"><a class="header" href="#step-3-qemu-running-op-tee-libdogecoin-key-manager-enclave">Step 3 (QEMU): Running OP-TEE Libdogecoin Key Manager Enclave</a></h3>
+<pre><code class="language-sh">docker run --privileged -v /dev/bus/usb:/dev/bus/usb -it -v "$(pwd):/src" -w /src jforissier/optee_os_ci:qemu_check /bin/bash -c "\
+  chmod 777 /src/optee/qemu/build/aarch64-softmmu/qemu-system-aarch64 &amp;&amp; \
+  cd /src/optee/out/bin &amp;&amp; \
+  /src/optee/qemu/build/aarch64-softmmu/qemu-system-aarch64 \
+    -L /src/optee/qemu/pc-bios \
+    -nographic \
+    -serial mon:stdio \
+    -serial file:/src/optee/serial1.log \
+    -smp 2 \
+    -machine virt,secure=on,mte=off,gic-version=3 \
+    -cpu max,pauth-impdef=on \
+    -d unimp \
+    -semihosting-config enable=on,target=native \
+    -m 1057 \
+    -bios bl1.bin \
+    -initrd rootfs.cpio.gz \
+    -kernel Image \
+    -no-acpi \
+    -drive file=libdogecoin.img,format=raw,id=libdogecoin,if=none \
+    -device virtio-blk-device,drive=libdogecoin \
+    -append 'console=ttyAMA0,38400 keep_bootcon root=/dev/vda2' \
+    -usb \
+    -device pci-ohci,id=ohci \
+    -device usb-host,vendorid=0x1050,productid=0x0407"
+</code></pre>
+<p><code>-v /dev/bus/usb:/dev/bus/usb</code> is used to pass the USB bus and YubiKey device to the container. The <code>-device usb-host,vendorid=0x1050,productid=0x0407</code> flag is used to pass the YubiKey to the QEMU VM. Replace <code>0x1050</code> and <code>0x0407</code> with the YubiKey's vendor and product IDs.</p>
+<p>The QEMU ARMv8 emulator will boot the OP-TEE OS and Trusted Firmware, and the libdogecoin TA will be loaded into the enclave. The host application can then interact with the enclave to perform key management operations.</p>
+<p>In the QEMU terminal, run the following commands to start the libdogecoin TA:</p>
+<pre><code class="language-sh"># Mount the drive and copy the TA, host application, and data if needed
+mkdir /mnt/libdogecoin &amp;&amp; \
+mount /dev/vda /mnt/libdogecoin &amp;&amp; \
+cp /mnt/libdogecoin/62d95dc0-7fc2-4cb3-a7f3-c13ae4e633c4.ta /lib/optee_armtz/ &amp;&amp; \
+cp /mnt/libdogecoin/optee_libdogecoin /usr/bin/ &amp;&amp; \
+if [ "$(ls -A /mnt/libdogecoin/data/tee/)" ]; then
+  cp /mnt/libdogecoin/data/tee/* /data/tee/ &amp;&amp; \
+  chown tee:tee /data/tee/*; \
+fi
+cd /usr/bin/ &amp;&amp; \
+chmod 777 optee_libdogecoin
+chmod 644 /lib/optee_armtz/62d95dc0-7fc2-4cb3-a7f3-c13ae4e633c4.ta
+
+# Run the OP-TEE Libdogecoin Key Manager Enclave (see tutorial for commands)
+optee_libdogecoin -c generate_mnemonic
+
+# When finished, copy the data back to the drive
+cp -r /data/tee/* /mnt/libdogecoin/data/tee/
+
+# Unmount the drive and power off the system
+umount /mnt/libdogecoin
+poweroff
+</code></pre>
+<h3 id="building-openenclave-libdogecoin-key-manager-enclave"><a class="header" href="#building-openenclave-libdogecoin-key-manager-enclave">Building OpenEnclave Libdogecoin Key Manager Enclave</a></h3>
+<p><strong>Dependencies</strong></p>
+<ul>
+<li>Ubuntu 20.04 or later</li>
+<li>Docker</li>
+<li>Libdogecoin</li>
+</ul>
+<pre><code class="language-sh">sudo apt-get install docker.io
+
+mkdir -p /doge
+cd /doge
+git clone https://github.com/dogecoinfoundation/libdogecoin.git
+cd libdogecoin
+</code></pre>
+<p>This command uses package installs for the OpenEnclave SDK and Docker to build the OpenEnclave Libdogecoin Key Manager Enclave. Docker is used to build the enclave in a clean environment. Refer to the <a href="https://github.com/openenclave/openenclave/blob/master/docs/GettingStartedDocs/Contributors/BuildingInADockerContainer.md">OpenEnclave documentation</a> for more information.</p>
+<pre><code class="language-sh">docker run --device /dev/sgx_enclave:/dev/sgx_enclave --device /dev/sgx_provision:/dev/sgx_provision -it -v $PWD:/src -w /src ubuntu:20.04 bash -c "\
+  # Set up the environment and build libdogecoin
+  export DEBIAN_FRONTEND=noninteractive &amp;&amp; \
+  apt-get update &amp;&amp; \
+  apt-get install -y autoconf automake libtool-bin build-essential curl python3 valgrind python3-dev python3-dbg pkg-config &amp;&amp; \
+  cd /src &amp;&amp; \
+
+  # Build libdogecoin for Enclave
+  make -j 4 -C depends HOST=x86_64-pc-linux-gnu &amp;&amp; \
+  ./autogen.sh &amp;&amp; \
+  ./configure --prefix=/src/depends/x86_64-pc-linux-gnu --enable-openenclave --enable-test-passwd CFLAGS=-Wp,-D_FORTIFY_SOURCE=0 &amp;&amp; \
+  make &amp;&amp; \
+  make install &amp;&amp; \
+
+  # Build libdogecoin for Host
+  make -j 4 -C depends HOST=x86_64-pc-linux-gnu/host &amp;&amp; \
+  ./configure --prefix=/src/depends/x86_64-pc-linux-gnu/host --enable-test-passwd &amp;&amp; \
+  make &amp;&amp; \
+  make install &amp;&amp; \
+
+  # Set up the OpenEnclave environment and build the enclave
+  apt-get install -y wget gnupg2 cmake &amp;&amp; \
+  echo 'deb [arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu focal main' | tee /etc/apt/sources.list.d/intel-sgx.list &amp;&amp; \
+  wget -qO - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key | apt-key add - &amp;&amp; \
+  echo 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main' | tee /etc/apt/sources.list.d/llvm-toolchain-focal-11.list &amp;&amp; \
+  wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - &amp;&amp; \
+  echo 'deb [arch=amd64] https://packages.microsoft.com/ubuntu/20.04/prod focal main' | tee /etc/apt/sources.list.d/msprod.list &amp;&amp; \
+  wget -qO - https://packages.microsoft.com/keys/microsoft.asc | apt-key add - &amp;&amp; \
+  apt update &amp;&amp; \
+  apt -y install clang-11 libssl-dev gdb libsgx-enclave-common libsgx-quote-ex libprotobuf17 libsgx-dcap-ql libsgx-dcap-ql-dev az-dcap-client open-enclave &amp;&amp; \
+  apt -y install dkms &amp;&amp; \
+  source /opt/openenclave/share/openenclave/openenclaverc &amp;&amp; \
+  mkdir -p /src/src/openenclave/build &amp;&amp; cd /src/src/openenclave/build &amp;&amp; \
+  cmake .. &amp;&amp; make &amp;&amp; make run &amp;&amp; \
+  exec bash"
+</code></pre>
+<p>Once the build is complete, see the OpenEnclave Host Command Line Tutorial below for instructions on running the OpenEnclave Libdogecoin Key Manager Enclave.</p>
+<h2 id="host-command-line-tutorials"><a class="header" href="#host-command-line-tutorials">Host Command Line Tutorials</a></h2>
+<p>In this section, we provide a step-by-step tutorial on using the host command line interface to interact with the key management enclaves in both environments. This tutorial will cover the basic operations including generating mnemonic seedphrases, generating public keys, generating addresses, signing messages, and signing transactions.</p>
+<h3 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h3>
+<p>Before proceeding, ensure you have successfully built and set up the OP-TEE and OpenEnclave environments as described in the previous sections.</p>
+<h3 id="op-tee-host-command-line-tutorial"><a class="header" href="#op-tee-host-command-line-tutorial">OP-TEE Host Command Line Tutorial</a></h3>
+<h4 id="generating-a-mnemonic-seedphrase"><a class="header" href="#generating-a-mnemonic-seedphrase">Generating a Mnemonic Seedphrase</a></h4>
+<p>Generate a mnemonic seedphrase for backup and recovery purposes. This is the first step in creating a new wallet. It will only be displayed once, so make sure to back it up.</p>
+<p>This command will generate a mnemonic seedphrase and display it on the screen. Either a shared secret for TOTP or a password must be provided. All other flags are optional, and the user will be prompted for input if not provided.</p>
+<p>Enter the shared secret for TOTP when prompted if enabled. The shared secret must be 40 hex characters (<em>e.g., <code>f38243e0e3e97a5c8aa5cc481a815add6c119648</code></em>).  If no shared secret is provided, a random one will be generated. The shared secret will be set on the YubiKey (if present) by the host application, and the mnemonic will be generated and displayed. If OTP Slot 1 is already programmed, the host application will prompt you to overwrite it. Ensure that your YubiKey slot configuration is not overwritten unless intended.</p>
+<pre><code class="language-sh">optee_libdogecoin -c generate_mnemonic -n &lt;mnemonic_input&gt; -s &lt;shared_secret&gt; -e &lt;entropy_size&gt; -p &lt;password&gt; -f &lt;flags&gt; -z
+</code></pre>
+<p>The <code>-n</code> flag is used to provide the mnemonic input for recovery purposes if needed. Replace <code>&lt;mnemonic_input&gt;</code> with the mnemonic seedphrase you want to use for recovery. If no mnemonic input is provided, the enclave will generate a random mnemonic seedphrase.</p>
+<p>The <code>-s</code> flag is used to provide the shared secret for TOTP authentication from command line instead of prompting the user. Replace <code>&lt;shared_secret&gt;</code> with the shared secret you want to use for TOTP authentication.</p>
+<p>The <code>-e</code> flag is used to provide the entropy size for the mnemonic seedphrase. Replace <code>&lt;entropy_size&gt;</code> with the desired entropy size in bits. If no entropy size is provided, the default value of <code>"256"</code> bits (24 words) will be used.</p>
+<p>The <code>-p</code> flag is used to provide the password for the mnemonic seedphrase. Replace <code>&lt;password&gt;</code> with the password you want to use for the mnemonic seedphrase.</p>
+<p>The <code>-f</code> flag is used to provide additional flags for the mnemonic seedphrase. Replace <code>&lt;flags&gt;</code> with the desired flags for the mnemonic seedphrase. The <code>"delegate"</code> flag is used to delegate account keys to a third party.</p>
+<p>The <code>-z</code> flag is used to enable YubiKey authentication. If the YubiKey is present, the shared secret will be set on the YubiKey.</p>
+<h4 id="generating-an-extended-public-key"><a class="header" href="#generating-an-extended-public-key">Generating an Extended Public Key</a></h4>
+<p>Generate an extended public key using the account and change level. The change level can be set to 0 for external addresses and 1 for internal addresses. The account number is the BIP-44 account. The public key will be derived from the seedphrase stored within the enclave.</p>
+<p>The <code>-o</code> flag is used to provide the account number for the extended public key. Replace <code>&lt;account_number&gt;</code> with the desired account number.</p>
+<p>The <code>-l</code> flag is used to provide the change level for the extended public key. Replace <code>&lt;change_level&gt;</code> with the desired change level.</p>
+<p>The <code>-h</code> flag is used to provide a custom path for the extended public key. Replace <code>&lt;custom_path&gt;</code> with the desired path for the extended public key.</p>
+<p>The <code>-a</code> flag is used to provide the auth token if a Yubikey is not present. Use a tool like <code>oathtool</code> to generate TOTP (*e.g., <code>oathtool --totp "f38243e0e3e97a5c8aa5cc481a815add6c119648"</code>).</p>
+<p>The <code>-p</code> flag is used to provide the password for the mnemonic seedphrase.</p>
+<p>The <code>-z</code> flag is used to enable YubiKey authentication. If the YubiKey is present, the TOTP code will be retrieved from the YubiKey and used as the authentication token.</p>
+<pre><code class="language-sh">optee_libdogecoin -c generate_extended_public_key -o &lt;account_number&gt; -l &lt;change_level&gt; -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<h4 id="generating-an-address"><a class="header" href="#generating-an-address">Generating an Address</a></h4>
+<p>Generate a Dogecoin address using the account, address index, and change level.</p>
+<pre><code class="language-sh">optee_libdogecoin -c generate_address -o &lt;account_number&gt; -l &lt;change_level&gt; -i &lt;address_index&gt; -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<p>Replace <code>&lt;account_number&gt;</code>, <code>&lt;address_index&gt;</code>, and <code>&lt;change_level&gt;</code> with appropriate values. The change level can be set to 0 for external addresses and 1 for internal addresses. The account number is the BIP-44 account. The address index is the index of the address within the account. The address will be derived from the seedphrase stored within the enclave.</p>
+<h4 id="signing-a-message"><a class="header" href="#signing-a-message">Signing a Message</a></h4>
+<p>Sign a message using the private key stored within the enclave. The message will be signed using the private key derived from the seedphrase stored within the enclave. If no message is provided, an example message will be signed for demonstration purposes.</p>
+<pre><code class="language-sh">optee_libdogecoin -c sign_message -o &lt;account_number&gt; -l &lt;change_level&gt; -i &lt;address_index&gt; -m &lt;message&gt; -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<p>Replace <code>&lt;message&gt;</code> with the message you want to sign.</p>
+<h4 id="signing-a-transaction"><a class="header" href="#signing-a-transaction">Signing a Transaction</a></h4>
+<p>Sign a raw transaction using the private key stored within the enclave. The transaction will be signed using the private key derived from the seedphrase stored within the enclave. A raw transaction is a hexadecimal string representing the transaction data. Currently, if no transaction data is provided, an example transaction will be signed for demonstration purposes.</p>
+<pre><code class="language-sh">optee_libdogecoin -c sign_transaction -o &lt;account_number&gt; -l &lt;change_level&gt; -i &lt;address_index&gt; -t &lt;raw_transaction&gt; -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<p>Replace <code>&lt;raw_transaction&gt;</code> with the raw transaction data.</p>
+<h4 id="delegate-key"><a class="header" href="#delegate-key">Delegate Key</a></h4>
+<p>Delegate account keys to a third party. This operation allows a third party to manage the keys for a specific account. The third party will be able to export the account keys on behalf of the user using the delegate password.</p>
+<pre><code class="language-sh">optee_libdogecoin -c delegate_key -o &lt;account_number&gt; -d &lt;delegate_password&gt; -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<p>Replace <code>&lt;delegate_password&gt;</code> with the password for the delegate account.</p>
+<h4 id="export-delegate-key"><a class="header" href="#export-delegate-key">Export Delegate Key</a></h4>
+<p>Export the delegated account keys using the delegate password. This operation allows the third party to export the account keys on behalf of the user.</p>
+<pre><code class="language-sh">optee_libdogecoin -c export_delegate_key -o &lt;account_number&gt; -d &lt;delegate_password&gt;
+</code></pre>
+<p>Replace <code>&lt;delegate_password&gt;</code> with the password for the delegate account.</p>
+<h3 id="openenclave-host-command-line-tutorial"><a class="header" href="#openenclave-host-command-line-tutorial">OpenEnclave Host Command Line Tutorial</a></h3>
+<p>Note: In OpenEnclave, <code>--simulate</code> is used to run the enclave in simulation mode. This is useful for testing without SGX hardware, but it is not secure. For production use, remove <code>--simulate</code> to run on real SGX hardware.</p>
+<h4 id="generating-a-mnemonic-seedphrase-1"><a class="header" href="#generating-a-mnemonic-seedphrase-1">Generating a Mnemonic Seedphrase</a></h4>
+<p>Generate a mnemonic seedphrase for backup and recovery purposes. This is the first step in creating a new wallet. It will only be displayed once, so make sure to back it up.</p>
+<p>This command will generate a mnemonic seedphrase and display it on the screen. Either a shared secret for TOTP or a password must be provided. All other flags are optional, and the user will be prompted for input if not provided.</p>
+<p>Enter the shared secret for TOTP when prompted if enabled. The shared secret must be 40 hex characters (<em>e.g., <code>f38243e0e3e97a5c8aa5cc481a815add6c119648</code></em>).  If no shared secret is provided, a random one will be generated. The shared secret will be set on the YubiKey (if present) by the host application, and the mnemonic will be generated and displayed. If OTP Slot 1 is already programmed, the host application will prompt you to overwrite it.</p>
+<pre><code class="language-sh">/doge/libdogecoin/src/openenclave/build/host/host /doge/libdogecoin/src/openenclave/build/enclave/enclave.signed --simulate -c generate_mnemonic -n &lt;mnemonic_input&gt; -s &lt;shared_secret&gt; -e &lt;entropy_size&gt; -p &lt;password&gt; -z
+</code></pre>
+<p>The <code>-n</code> flag is used to provide the mnemonic input for recovery purposes if needed. Replace <code>&lt;mnemonic_input&gt;</code> with the mnemonic seedphrase you want to use for recovery. If no mnemonic input is provided, the enclave will generate a random mnemonic seedphrase.</p>
+<p>The <code>-s</code> flag is used to provide the shared secret for TOTP authentication from command line instead of prompting the user. Replace <code>&lt;shared_secret&gt;</code> with the shared secret you want to use for TOTP authentication.</p>
+<p>The <code>-e</code> flag is used to provide the entropy size for the mnemonic seedphrase. Replace <code>&lt;entropy_size&gt;</code> with the desired entropy size in bits. If no entropy size is provided, the default value of <code>"256"</code> bits (24 words) will be used.</p>
+<p>The <code>-p</code> flag is used to provide the password for the mnemonic seedphrase. Replace <code>&lt;password&gt;</code> with the password you want to use for the mnemonic seedphrase.</p>
+<p>The <code>-z</code> flag is used to enable YubiKey authentication. If the YubiKey is present, the shared secret will be set on the YubiKey.</p>
+<h4 id="generating-an-extended-public-key-1"><a class="header" href="#generating-an-extended-public-key-1">Generating an Extended Public Key</a></h4>
+<p>Generate an extended public key using the account and change level. The change level can be set to 0 for external addresses and 1 for internal addresses. The account number is the BIP-44 account.</p>
+<p>The TOTP code will be retrieved from the YubiKey (if present) and used as the authentication token for this operation.</p>
+<pre><code class="language-sh">/doge/libdogecoin/src/openenclave/build/host/host /doge/libdogecoin/src/openenclave/build/enclave/enclave.signed --simulate -c generate_extended_public_key -o &lt;account_number&gt; -l &lt;change_level&gt; -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<p>The <code>-o</code> flag is used to provide the account number for the extended public key. Replace <code>&lt;account_number&gt;</code> with the desired account number.</p>
+<p>The <code>-l</code> flag is used to provide the change level for the extended public key. Replace <code>&lt;change_level&gt;</code> with the desired change level.</p>
+<p>The <code>-h</code> flag is used to provide a custom path for the extended public key. Replace <code>&lt;custom_path&gt;</code> with the desired path for the extended public key.</p>
+<p>The <code>-a</code> flag is used to provide the auth token if a Yubikey is not present. Use a tool like <code>oathtool</code> to generate TOTP (*e.g., <code>oathtool --totp "f38243e0e3e97a5c8aa5cc481a815add6c119648"</code>).</p>
+<p>The <code>-p</code> flag is used to provide the password for the mnemonic seedphrase.</p>
+<p>The <code>-z</code> flag is used to enable YubiKey authentication. If the YubiKey is present, the TOTP code will be retrieved from the YubiKey and used as the authentication token.</p>
+<h4 id="generating-an-address-1"><a class="header" href="#generating-an-address-1">Generating an Address</a></h4>
+<p>Generate a Dogecoin address using the account, address index, and change level.</p>
+<pre><code class="language-sh">/doge/libdogecoin/src/openenclave/build/host/host /doge/libdogecoin/src/openenclave/build/enclave/enclave.signed --simulate -c generate_address -o &lt;account_number&gt; -l &lt;change_level&gt; -i &lt;address_index&gt; -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<p>Replace <code>&lt;account_number&gt;</code>, <code>&lt;address_index&gt;</code>, and <code>&lt;change_level&gt;</code> with appropriate values.</p>
+<h4 id="signing-a-message-1"><a class="header" href="#signing-a-message-1">Signing a Message</a></h4>
+<p>Sign a message using the private key stored within the enclave. If no message is provided, an example message will be signed for demonstration purposes.</p>
+<pre><code class="language-sh">/doge/libdogecoin/src/openenclave/build/host/host /doge/libdogecoin/src/openenclave/build/enclave/enclave.signed --simulate -c sign_message -o &lt;account_number&gt; -l &lt;change_level&gt; -i &lt;address_index&gt; -m "This is just a test message" -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<p>Replace <code>"This is just a test message"</code> with the message you want to sign.</p>
+<h4 id="signing-a-transaction-1"><a class="header" href="#signing-a-transaction-1">Signing a Transaction</a></h4>
+<p>Sign a raw transaction using the private key stored within the enclave. The transaction will be signed using the private key derived from the seedphrase stored within the enclave. A raw transaction is a hexadecimal string representing the transaction data. Currently, if no transaction data is provided, an example transaction will be signed for demonstration purposes.</p>
+<pre><code class="language-sh">/doge/libdogecoin/src/openenclave/build/host/host /doge/libdogecoin/src/openenclave/build/enclave/enclave.signed --simulate -c sign_transaction -o &lt;account_number&gt; -l &lt;change_level&gt; -i &lt;address_index&gt; -t &lt;raw_transaction&gt; -h &lt;custom_path&gt; -a &lt;auth_token&gt; or -p &lt;password&gt; -z
+</code></pre>
+<p>Replace <code>&lt;raw_transaction&gt;</code> with the raw transaction data.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>In this document, we explored the integration of libdogecoin with secure enclaves in Trusted Execution Environments (TEEs). We discussed the benefits of using Intel SGX and ARM TrustZone to secure key management operations, including mnemonic seedphrase generation, public key generation, address generation, message signing, and transaction signing. We provided a step-by-step tutorial on using the host command line interface to interact with the key management enclaves in both OP-TEE and OpenEnclave environments. We also outlined critical vulnerabilities in TEEs and provided recommendations for mitigating these risks. We hope this document serves as a valuable resource for developers looking to enhance the security of Dogecoin transactions using secure enclaves.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="eckey.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="rest.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="eckey.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="rest.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="editor.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

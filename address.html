@@ -1,0 +1,754 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Address - Libdogecoin, a clean C library of Dogecoin building blocks</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C library (and series of bindings to popular languages) which will allow anyone to build a Dogecoin compliant product, without needing to worry about the deeper, complicated specifics of the crypto functions.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Libdogecoin, a clean C library of Dogecoin building blocks</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/dogecoinfoundation/libdogecoin/tree/main/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/dogeorg/libdogecoin-docs/edit/main/src/address.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="libdogecoin-address-api"><a class="header" href="#libdogecoin-address-api">Libdogecoin Address API</a></h1>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
+<ul>
+<li><a href="#libdogecoin-address-api">Libdogecoin Address API</a>
+<ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#introduction">Introduction</a>
+<ul>
+<li><a href="#simple-addresses">Simple Addresses</a></li>
+<li><a href="#hd-addresses">HD Addresses</a></li>
+<li><a href="#seed-phrases">Seed phrases</a></li>
+</ul>
+</li>
+<li><a href="#simple-address-generation-process">Simple Address Generation Process</a></li>
+<li><a href="#essential-address-api">Essential Address API</a>
+<ul>
+<li><a href="#generateprivpubkeypair"><strong>generatePrivPubKeypair:</strong></a></li>
+<li><a href="#generatehdmasterpubkeypair"><strong>generateHDMasterPubKeypair:</strong></a></li>
+<li><a href="#generatederivedhdpubkey"><strong>generateDerivedHDPubKey:</strong></a></li>
+<li><a href="#verifyprivpubkeypair"><strong>verifyPrivPubKeypair</strong></a></li>
+<li><a href="#verifyhdmasterpubkeypair"><strong>verifyHDMasterPubKeypair</strong></a></li>
+<li><a href="#verifyp2pkhaddress"><strong>verifyP2pkhAddress</strong></a></li>
+<li><a href="#getHDNodePrivateKeyWIFByPath"><strong>getHDNodePrivateKeyWIFByPath</strong></a></li>
+<li><a href="#getHDNodeAndExtKeyByPath"><strong>getHDNodeAndExtKeyByPath</strong></a></li>
+<li><a href="#getderivedhdaddress"><strong>getDerivedHDAddress</strong></a></li>
+<li><a href="#getderivedhdaddressbypath"><strong>getDerivedHDAddressByPath</strong></a></li>
+</ul>
+</li>
+<li><a href="#advanced-address-api">Advanced Address API</a>
+<ul>
+<li><a href="#generaterandomenglishmnemonic"><strong>generateRandomEnglishMnemonic:</strong></a></li>
+<li><a href="#generaterandomenglishmnemonictpm"><strong>generateRandomEnglishMnemonicTPM:</strong></a></li>
+<li><a href="#getderivedhdaddressfrommnemonic"><strong>getDerivedHDAddressFromMnemonic:</strong></a></li>
+<li><a href="#getderivedhdaddressfromencryptedseed"><strong>getDerivedHDAddressFromEncryptedSeed:</strong></a></li>
+<li><a href="#getderivedhdaddressfromencryptedmnemonic"><strong>getDerivedHDAddressFromEncryptedMnemonic:</strong></a></li>
+<li><a href="#getderivedhdaddressfromencryptedhdnode"><strong>getDerivedHDAddressFromEncryptedHDNode:</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>A Dogecoin address is the public key of an asymmetric key pair, and provides a designation on the network to hold Dogecoins on the ledger. By holding the private key for an address on the ledger, you have the ability to sign transactions to move (spend/send) the Dogecoins attributed to the address.</p>
+<p>Dogecoin addresses can be created in a number of ways, each with benefits depending on the objective of the address owner(s). A couple of these are listed below:</p>
+<h3 id="simple-addresses"><a class="header" href="#simple-addresses">Simple Addresses</a></h3>
+<p>These are the most common form of Dogecoin address, a single private key with a single public key (address). Most often these are what an exchange would use to retain full custody of a wallet on behalf of their users, or for a simple desktop / mobile wallet they provide a basic approach to address management.</p>
+<h3 id="hd-addresses"><a class="header" href="#hd-addresses">HD Addresses</a></h3>
+<p>HD, or <em>Hierarchical Deterministic</em> addresses, unlike simple addresses are created from a seed key-phrase, usually twelve random unique words rather than a 256-bit private key. The key-phrase is then used (with the addition of a simple, incrementing number) to generate an unlimited supply of public Dogecoin addresses which the holder of the key-phrase can sign.</p>
+<h3 id="seed-phrases"><a class="header" href="#seed-phrases">Seed phrases</a></h3>
+<p>Seed phrases, also known as mnemonic phrases, are a commonly used method to create and backup HD addresses. These phrases consist of 12 or 24 random words, generated from a 128 or 256-bit entropy source, respectively. Seed phrases can then be used to generate an HD address.</p>
+<p>When using seed phrases to generate HD addresses, it is essential to ensure the security of the seed phrase. Seed phrases should be treated with extreme caution and must be stored safely in a secure location. There are several steps that you can take to ensure that your seed phrase remains secure:</p>
+<ul>
+<li>Do not type your seed phrase into any device connected to the internet, as it could be compromised by malware or keyloggers.</li>
+<li>Store your seed phrase offline in a secure and tamper-evident location, such as a hardware wallet, paper wallet or encrypted digital storage device.</li>
+<li>Do not share your seed phrase with anyone, as it grants access to all the funds in your wallet.</li>
+<li>Use a strong, unique and memorable passphrase to protect your seed phrase from unauthorized access.</li>
+</ul>
+<p>When embedding libdogecoin in your project, it is important to consider the wallet type you are using. HD wallets, which use seed phrases to generate addresses, are generally considered more secure than simple wallets, which use a single private key for all addresses. Hot wallets, which are connected to the internet, are more convenient to use but are also more vulnerable to attacks. Cold wallets, which are kept offline, are more secure but may be less convenient to use for frequent transactions. You should carefully consider your security needs and choose the appropriate wallet type for your project.</p>
+<h2 id="simple-address-generation-process"><a class="header" href="#simple-address-generation-process">Simple Address Generation Process</a></h2>
+<p>The first step to create a simple pay-to-public-key-hash (p2pkh) address is to generate the private key, which is a randomly generated 256-bit (32-byte) unsigned integer. This must be done within a secp256k1 context in order to generate a private key, as this context ensures the key's validity can be mathematically proven by other validators.</p>
+<p>This random private key is then encoded into wallet import format (WIF) which makes the private key readable and easier to copy. If viewing this private key, <strong>DO NOT REVEAL IT TO ANYONE ELSE</strong>! This private key grants you the ability to spend any Dogecoin sent to any public key associated with this private key, and sharing it will compromise all funds in your wallet.</p>
+<p>The next step in the process is deriving the public key from the private key, using the mathematical properties of the secp256k1 elliptical curve (this is done internally by Libdogecoin). This should be done within the same context that was created at the beginning of the session, because it is expensive to regenerate all the cryptographic information necessary and this extraneous computation should be avoided.</p>
+<p>One thing to note is that this public key is <strong>NOT</strong> the same as a Dogecoin address. The final step in the address generation process is to convert the public key (in the form of seemingly random bytes) into a readable, valid Dogecoin address. The steps for achieving this are as follows:</p>
+<ul>
+<li>Pass the public key once through a SHA256 hash function.</li>
+<li>Pass the result of this hash into a RIPEMD-160 hash function.</li>
+<li>Prefix this RIPEMD-160 result with the character associated with the specified blockchain. <em>('D' for mainnet, 'n' for testnet)</em></li>
+<li>Double-hash the current string (prefix + RIPEMD-160 result) with SHA256 and save the result as a 32-byte checksum.</li>
+<li>Append the first 4 bytes of this checksum to the current string.</li>
+<li>Encode the current string with base58 to get the final Dogecoin p2pkh address.</li>
+</ul>
+<p>You now have a valid Dogecoin address! Its validity can be checked using the verifyPrivPubKeypair() function, which assesses whether the checksum holds after the address undergoes base58 decoding. Keep in mind, the public key cannot be derived from this p2pkh address because it was passed through irreversible hash functions. However, this address can now be used to receive funds and eventually spend them using the private key generated in the beginning.</p>
+<p>These steps can be very confusing, so Libdogecoin does all of them for you when you call <code>generatePrivPubKeyPair()</code>, from private key generation to public key derivation to p2pkh address conversion. The process is very similar for HD key pair generation but with a little more complexity involved in generating the raw key pair. For more information on how to call the functions that perform the process listed above, see the Essential API description below.</p>
+<h2 id="essential-address-api"><a class="header" href="#essential-address-api">Essential Address API</a></h2>
+<p>These functions implement the core functionality of Libdogecoin for address generation and validation, and are described in depth below. You can access them through a C program, by including the <code>libdogecoin.h</code> header in the source code and including the <code>libdogecoin.a</code> library at compile time.</p>
+<p>When using functions from either the Essential or Advanced Address API, include the -lunistring flag during the linking process. This is because the Advanced Address API uses the GNU libunistring library for Unicode string manipulation. To include the -lunistring flag during linking, simply add it to the linker command when building your project:</p>
+<p><code>gcc -o example example.c -ldogecoin -lunistring</code></p>
+<p>Ensure that the <code>libunistring</code> library is installed on your system before linking.</p>
+<hr />
+<h3 id="generateprivpubkeypair"><a class="header" href="#generateprivpubkeypair"><strong>generatePrivPubKeypair:</strong></a></h3>
+<p><code>int generatePrivPubKeypair(char* wif_privkey, char* p2pkh_pubkey, bool is_testnet)</code></p>
+<p>This function will populate provided string variables (privkey, pubkey) with freshly generated respective private and public keys, specifically for either mainnet or testnet as specified through the network flag (is_testnet). The function returns 1 on success and 0 on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-c">#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+  int privkeyLen = PRIVKEYWIFLEN;
+  int pubkeyLen = P2PKHLEN;
+
+  char privKey[privkeyLen];
+  char pubKey[pubkeyLen];
+
+  dogecoin_ecc_start();
+  generatePrivPubKeypair(privKey, pubKey, false); // generating a mainnet pair
+  dogecoin_ecc_stop();
+
+  printf("My private key for mainnet is: %s\n", privKey);
+  printf("My public key for mainnet is: %s\n", pubKey);
+}
+</code></pre>
+<hr />
+<h3 id="generatehdmasterpubkeypair"><a class="header" href="#generatehdmasterpubkeypair"><strong>generateHDMasterPubKeypair:</strong></a></h3>
+<p><code>int generateHDMasterPubKeypair(char* hd_privkey_master, char* p2pkh_pubkey_master, bool is_testnet)</code></p>
+<p>This function will populate provided string variables (privkey, pubkey) with freshly generated respective private and public keys for a hierarchical deterministic wallet, specifically for either mainnet or testnet as specified through the network flag (is_testnet). The function returns 1 on success and 0 on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+  int masterPrivkeyLen = HDKEYLEN; // enough cushion
+  int pubkeyLen = P2PKHLEN;
+
+  char masterPrivKey[masterPrivkeyLen];
+  char masterPubKey[pubkeyLen];
+
+  dogecoin_ecc_start();
+  generateHDMasterPubKeypair(masterPrivKey, masterPubKey, false);
+  dogecoin_ecc_stop();
+
+  printf("My private key for mainnet is: %s\n", masterPrivKey);
+  printf("My public key for mainnet is: %s\n", masterPubKey);
+}
+</code></pre>
+<hr />
+<h3 id="generatederivedhdpubkey"><a class="header" href="#generatederivedhdpubkey"><strong>generateDerivedHDPubKey:</strong></a></h3>
+<p><code>int generateDerivedHDPubkey(const char* hd_privkey_master, char* p2pkh_pubkey)</code></p>
+<p>This function takes a given HD master private key (hd_privkey_master) and loads it into the provided pointer for the resulting derived public key (p2pkh_pubkey). This private key input should come from the result of generateHDMasterPubKeypair(). The function returns 1 on success and 0 on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+  int masterPrivkeyLen = HDKEYLEN; // enough cushion
+  int pubkeyLen = P2PKHLEN;
+
+  char masterPrivKey[masterPrivkeyLen];
+  char masterPubKey[pubkeyLen];
+  char childPubKey[pubkeyLen];
+
+  dogecoin_ecc_start();
+  generateHDMasterPubKeypair(masterPrivKey, masterPubKey, false);
+  generateDerivedHDPubkey(masterPrivKey, childPubKey);
+  dogecoin_ecc_stop();
+
+  printf("master private key: %s\n", masterPrivKey);
+  printf("master public key: %s\n", masterPubKey);
+  printf("derived child key: %s\n", childPubKey);
+}
+</code></pre>
+<hr />
+<h3 id="verifyprivpubkeypair"><a class="header" href="#verifyprivpubkeypair"><strong>verifyPrivPubKeypair</strong></a></h3>
+<p><code>int verifyPrivPubKeypair(char* wif_privkey, char* p2pkh_pubkey, bool is_testnet)</code></p>
+<p>This function requires a previously generated key pair (wif_privkey, p2pkh_pubkey) and the network they were generated for (is_testnet). It then validates that the given public key was indeed derived from the given private key, returning 1 if the keys are associated and 0 if they are not. This could be useful prior to signing, or in some kind of wallet recovery tool to match keys.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+  int privkeyLen = PRIVKEYWIFLEN;
+  int pubkeyLen = P2PKHLEN;
+
+  char privKey[privkeyLen];
+  char pubKey[pubkeyLen];
+
+  dogecoin_ecc_start();
+  generatePrivPubKeypair(privKey, pubKey, false);
+
+  if (verifyPrivPubKeypair(privKey, pubKey, false)) {
+    printf("Keypair is valid.\n");
+  }
+  else {
+    printf("Keypair is invalid.\n");
+  }
+  dogecoin_ecc_stop();
+}
+</code></pre>
+<hr />
+<h3 id="verifyhdmasterpubkeypair"><a class="header" href="#verifyhdmasterpubkeypair"><strong>verifyHDMasterPubKeypair</strong></a></h3>
+<p><code>int verifyHDMasterPubKeypair(char* hd_privkey_master, char* p2pkh_pubkey_master, bool is_testnet)</code></p>
+<p>This function validates that a given master private key matches a given master public key. This could be useful prior to signing, or in some kind of wallet recovery tool to match keys. This function requires a previously generated HD master key pair (hd_privkey_master, p2pkh_pubkey_master) and the network they were generated for (is_testnet). It then validates that the given public key was indeed derived from the given master private key, returning 1 if the keys are associated and 0 if they are not. This could be useful prior to signing, or in some kind of wallet recovery tool to match keys.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+  int masterPrivkeyLen = HDKEYLEN; // enough cushion
+  int pubkeyLen = P2PKHLEN;
+
+  char masterPrivKey[masterPrivkeyLen];
+  char masterPubKey[pubkeyLen];
+
+  dogecoin_ecc_start();
+  generateHDMasterPubKeypair(masterPrivKey, masterPubKey, false);
+
+  if (verifyHDMasterPubKeypair(masterPrivKey, masterPubKey, false)) {
+    printf("Keypair is valid.\n");
+  }
+  else {
+    printf("Keypair is invalid.\n");
+  }
+  dogecoin_ecc_stop();
+}
+</code></pre>
+<hr />
+<h3 id="verifyp2pkhaddress"><a class="header" href="#verifyp2pkhaddress"><strong>verifyP2pkhAddress</strong></a></h3>
+<p><code>int verifyP2pkhAddress(char* p2pkh_pubkey, uint8_t len)</code></p>
+<p>This function accepts an existing public key (p2pkh_pubkey) and its length in characters (len) to perform some basic validation to determine if it looks like a valid Dogecoin address. It returns 1 if the address is valid and 0 if it is not. This is useful for wallets that want to check that a recipient address looks legitimate.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+  int privkeyLen = HDKEYLEN; // enough cushion
+  int pubkeyLen = P2PKHLEN;
+
+  char privKey[privkeyLen];
+  char pubKey[pubkeyLen];
+
+  dogecoin_ecc_start();
+  generatePrivPubKeypair(privKey, pubKey, false);
+
+  if (verifyP2pkhAddress(pubKey, strlen(pubKey))) {
+    printf("Address is valid.\n");
+  }
+  else {
+    printf("Address is invalid.\n");
+  }
+  dogecoin_ecc_stop();
+}
+</code></pre>
+<hr />
+<h3 id="gethdnodeprivatekeywifbypath"><a class="header" href="#gethdnodeprivatekeywifbypath"><strong>getHDNodePrivateKeyWIFByPath</strong></a></h3>
+<p><code>char* getHDNodePrivateKeyWIFByPath(const char* masterkey, const char* derived_path, char* outaddress, bool outprivkey)</code></p>
+<p>This function derives a hierarchical deterministic child key by way of providing the extended master key, derived_path, outaddress and outprivkey.
+It will return the dogecoin_hdnode's private key serialized in WIF format if successful and exits if the proper arguments are not provided.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;assert.h&gt;
+#include &lt;stdio.h&gt;
+
+int main() {
+  size_t extoutsize = 112;
+  char* extout = dogecoin_char_vla(extoutsize);
+  char* masterkey_main_ext = "dgpv51eADS3spNJh8h13wso3DdDAw3EJRqWvftZyjTNCFEG7gqV6zsZmucmJR6xZfvgfmzUthVC6LNicBeNNDQdLiqjQJjPeZnxG8uW3Q3gCA3e";
+  dogecoin_ecc_start();
+  u_assert_str_eq(getHDNodePrivateKeyWIFByPath(masterkey_main_ext, "m/44'/3'/0'/0/0", extout, true), "QNvtKnf9Qi7jCRiPNsHhvibNo6P5rSHR1zsg3MvaZVomB2J3VnAG");
+  u_assert_str_eq(extout, "dgpv5BeiZXttUioRMzXUhD3s2uE9F23EhAwFu9meZeY9G99YS6hJCsQ9u6PRsAG3qfVwB1T7aQTVGLsmpxMiczV1dRDgzpbUxR7utpTRmN41iV7");
+  dogecoin_ecc_stop();
+  free(extout);
+}
+</code></pre>
+<hr />
+<h3 id="gethdnodeandextkeybypath"><a class="header" href="#gethdnodeandextkeybypath"><strong>getHDNodeAndExtKeyByPath</strong></a></h3>
+<p><code>dogecoin_hdnode* getHDNodeAndExtKeyByPath(const char* masterkey, const char* derived_path, char* outaddress, bool outprivkey)</code></p>
+<p>This function derives a hierarchical deterministic child key by way of providing the extended master key, derived_path, outaddress and outprivkey.  The masterkey can be either a private or public key, but if it is a public key, the outprivkey flag must be set to false and the derived_path must be a public derivation path.
+It will return the dogecoin_hdnode if successful and exits if the proper arguments are not provided.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;assert.h&gt;
+#include &lt;stdio.h&gt;
+
+int main() {
+  size_t extoutsize = 112;
+  char* extout = dogecoin_char_vla(extoutsize);
+  char* masterkey_main_ext = "dgpv51eADS3spNJh8h13wso3DdDAw3EJRqWvftZyjTNCFEG7gqV6zsZmucmJR6xZfvgfmzUthVC6LNicBeNNDQdLiqjQJjPeZnxG8uW3Q3gCA3e";
+  dogecoin_ecc_start();
+  dogecoin_hdnode* hdnode = getHDNodeAndExtKeyByPath(masterkey_main_ext, "m/44'/3'/0'/0/0", extout, true);
+  u_assert_str_eq(utils_uint8_to_hex(hdnode-&gt;private_key, sizeof hdnode-&gt;private_key), "09648faa2fa89d84c7eb3c622e06ed2c1c67df223bc85ee206b30178deea7927");
+  dogecoin_privkey_encode_wif((const dogecoin_key*)hdnode-&gt;private_key, &amp;dogecoin_chainparams_main, privkeywif_main, &amp;wiflen);
+  u_assert_str_eq(privkeywif_main, "QNvtKnf9Qi7jCRiPNsHhvibNo6P5rSHR1zsg3MvaZVomB2J3VnAG");
+  u_assert_str_eq(extout, "dgpv5BeiZXttUioRMzXUhD3s2uE9F23EhAwFu9meZeY9G99YS6hJCsQ9u6PRsAG3qfVwB1T7aQTVGLsmpxMiczV1dRDgzpbUxR7utpTRmN41iV7");
+  dogecoin_ecc_stop();
+  dogecoin_hdnode_free(hdnode);
+  free(extout);
+}
+</code></pre>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;assert.h&gt;
+#include &lt;stdio.h&gt;
+
+int main() {
+  char masterkey[HDKEYLEN] = {0};
+  char master_public_key[HDKEYLEN] = {0};
+  char extkeypath[KEYPATHMAXLEN] = "m/0/0/0/0/0";
+  char extpubkey[HDKEYLEN] = {0};
+  dogecoin_ecc_start();
+
+  // Generate a master key pair from the seed, and then get the master public key
+  getHDRootKeyFromSeed(utils_hex_to_uint8("5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4"), MAX_SEED_SIZE, false, masterkey);
+  getHDPubKey(masterkey, false, master_public_key);
+
+  // Derive an extended normal (non-hardened) public key from the master public key
+  getHDNodeAndExtKeyByPath(master_public_key, extkeypath, extpubkey, false);
+  dogecoin_ecc_stop();
+  printf("%s\n", extpubkey);
+}
+</code></pre>
+<hr />
+<h3 id="getderivedhdaddress"><a class="header" href="#getderivedhdaddress"><strong>getDerivedHDAddress</strong></a></h3>
+<p><code>int getDerivedHDAddress(const char* masterkey, uint32_t account, bool ischange, uint32_t addressindex, char* outaddress, bool outprivkey)</code></p>
+<p>This function derives a hierarchical deterministic address by way of providing the extended master key, account, ischange and addressindex.
+It will return 1 if the function is successful and 0 if not.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;assert.h&gt;
+#include &lt;stdio.h&gt;
+
+int main() {
+  size_t extoutsize = 112;
+  char* extout = dogecoin_char_vla(extoutsize);
+  char* masterkey_main_ext = "dgpv51eADS3spNJh8h13wso3DdDAw3EJRqWvftZyjTNCFEG7gqV6zsZmucmJR6xZfvgfmzUthVC6LNicBeNNDQdLiqjQJjPeZnxG8uW3Q3gCA3e";
+  dogecoin_ecc_start();
+  int res = getDerivedHDAddress(masterkey_main_ext, 0, false, 0, extout, true);
+  u_assert_int_eq(res, true);
+  u_assert_str_eq(extout, "dgpv5BeiZXttUioRMzXUhD3s2uE9F23EhAwFu9meZeY9G99YS6hJCsQ9u6PRsAG3qfVwB1T7aQTVGLsmpxMiczV1dRDgzpbUxR7utpTRmN41iV7");
+  dogecoin_ecc_stop();
+  free(extout);
+}
+</code></pre>
+<hr />
+<h3 id="getderivedhdaddressbypath"><a class="header" href="#getderivedhdaddressbypath"><strong>getDerivedHDAddressByPath</strong></a></h3>
+<p><code>int getDerivedHDAddressByPath(const char* masterkey, const char* derived_path, char* outaddress, bool outprivkey)</code></p>
+<p>This function derives an extended HD address by custom path in string format (derived_path).
+It returns 1 if the address is valid and 0 if it is not.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;assert.h&gt;
+#include &lt;stdio.h&gt;
+
+int main() {
+  size_t extoutsize = 112;
+  char* extout = dogecoin_char_vla(extoutsize);
+  char* masterkey_main_ext = "dgpv51eADS3spNJh8h13wso3DdDAw3EJRqWvftZyjTNCFEG7gqV6zsZmucmJR6xZfvgfmzUthVC6LNicBeNNDQdLiqjQJjPeZnxG8uW3Q3gCA3e";
+  dogecoin_ecc_start();
+  res = getDerivedHDAddressByPath(masterkey_main_ext, "m/44'/3'/0'/0/0", extout, true);
+  u_assert_int_eq(res, true);
+  u_assert_str_eq(extout, "dgpv5BeiZXttUioRMzXUhD3s2uE9F23EhAwFu9meZeY9G99YS6hJCsQ9u6PRsAG3qfVwB1T7aQTVGLsmpxMiczV1dRDgzpbUxR7utpTRmN41iV7");
+  dogecoin_ecc_stop();
+  free(extout);
+}
+</code></pre>
+<h2 id="advanced-address-api"><a class="header" href="#advanced-address-api">Advanced Address API</a></h2>
+<p>These functions implement advanced functionality of Libdogecoin for address generation and validation, and are described in depth below. You can access them through a C program, by including the <code>libdogecoin.h</code> header in the source code and including the <code>libdogecoin.a</code> library at compile time.</p>
+<hr />
+<h3 id="generaterandomenglishmnemonic"><a class="header" href="#generaterandomenglishmnemonic"><strong>generateRandomEnglishMnemonic</strong></a></h3>
+<p><code>int generateRandomEnglishMnemonic(const ENTROPY_SIZE size, MNEMONIC mnemonic);</code></p>
+<p>This function generates a random English mnemonic phrase (seed phrase). The function returns 0 on success and -1 on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main () {
+  MNEMONIC seed_phrase;
+
+  dogecoin_ecc_start();
+  generateRandomEnglishMnemonic("256", seed_phrase);
+  dogecoin_ecc_stop();
+
+  printf("%s\n", seed_phrase);
+}
+</code></pre>
+<p><em>C++ usage:</em></p>
+<pre><code class="language-C++">extern "C" {
+#include "libdogecoin.h"
+}
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+  MNEMONIC seed_phrase;
+
+  dogecoin_ecc_start();
+  generateRandomEnglishMnemonic("256", seed_phrase);
+  dogecoin_ecc_stop();
+
+  cout &lt;&lt; seed_phrase &lt;&lt; endl;
+}
+</code></pre>
+<hr />
+<h3 id="generaterandomenglishmnemonictpm"><a class="header" href="#generaterandomenglishmnemonictpm"><strong>generateRandomEnglishMnemonicTPM</strong></a></h3>
+<p><code>dogecoin_bool generateRandomEnglishMnemonicTPM(MNEMONIC mnemonic, const int file_num, const dogecoin_bool overwrite);</code></p>
+<p>This function generates a random English mnemonic using a TPM (Trusted Platform Module). It stores the generated mnemonic in the provided <code>mnemonic</code> buffer. The <code>file_num</code> parameter specifies the encrypted storage file number, and the <code>overwrite</code> parameter indicates whether to overwrite an existing mnemonic in the encrypted storage. The function returns <code>TRUE</code> on success and <code>FALSE</code> on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">
+#include "libdogecoin.h"
+
+int main() {
+    MNEMONIC mnemonic;
+    int file_num = 0;  // Specify the TPM storage file number
+    dogecoin_bool overwrite = TRUE;  // Set to TRUE to overwrite existing mnemonic
+
+    if (generateRandomEnglishMnemonicTPM(mnemonic, file_num, overwrite)) {
+        printf("Generated mnemonic: %s\n", mnemonic);
+    } else {
+        printf("Error generating mnemonic.\n");
+        return -1;
+    }
+}
+</code></pre>
+<hr />
+<h3 id="getderivedhdaddressfrommnemonic"><a class="header" href="#getderivedhdaddressfrommnemonic"><strong>getDerivedHDAddressFromMnemonic</strong></a></h3>
+<p><code>int getDerivedHDAddressFromMnemonic(const uint32_t account, const uint32_t index, const CHANGE_LEVEL change_level, const MNEMONIC mnemonic, const PASS pass, char* p2pkh_pubkey, const bool is_testnet);</code></p>
+<p>This function generates a new dogecoin address from a mnemonic and a slip44 key path.  The function returns 0 on success and -1 on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main () {
+  int addressLen = P2PKHLEN;
+
+  MNEMONIC seed_phrase;
+  char address [addressLen];
+
+  dogecoin_ecc_start();
+  generateRandomEnglishMnemonic("256", seed_phrase);
+  getDerivedHDAddressFromMnemonic(0, 0, "0", seed_phrase, NULL, address, false);
+  dogecoin_ecc_stop();
+
+  printf("%s\n", seed_phrase);
+  printf("%s\n", address);
+}
+</code></pre>
+<p><em>C++ usage:</em></p>
+<pre><code class="language-C++">extern "C" {
+#include "libdogecoin.h"
+}
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+  int addressLen = P2PKHLEN;
+
+  MNEMONIC seed_phrase;
+  char address [addressLen];
+
+  dogecoin_ecc_start();
+  generateRandomEnglishMnemonic("256", seed_phrase);
+  getDerivedHDAddressFromMnemonic(0, 0, "0", seed_phrase, NULL, address, false);
+  dogecoin_ecc_stop();
+
+  cout &lt;&lt; seed_phrase &lt;&lt; endl;
+  cout &lt;&lt; address &lt;&lt; endl;
+}
+</code></pre>
+<hr />
+<h3 id="getderivedhdaddressfromencryptedseed"><a class="header" href="#getderivedhdaddressfromencryptedseed"><strong>getDerivedHDAddressFromEncryptedSeed</strong></a></h3>
+<p><code>int getDerivedHDAddressFromEncryptedSeed(const uint32_t account, const uint32_t index, const CHANGE_LEVEL change_level, char* p2pkh_pubkey, const dogecoin_bool is_testnet, const int file_num);</code></p>
+<p>This function generates a new Dogecoin address from an encrypted seed and a slip44 key path. The function returns 0 on success and -1 on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">
+#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+    int addressLen = P2PKHLEN;
+    char derived_address[addressLen];
+
+    if (getDerivedHDAddressFromEncryptedSeed(0, 0, BIP44_CHANGE_EXTERNAL, derived_address, false, TEST_FILE) == 0) {
+        printf("Derived address: %s\n", derived_address);
+    } else {
+        printf("Error occurred.\n");
+        return -1;
+    }
+}
+</code></pre>
+<hr />
+<h3 id="getderivedhdaddressfromencryptedmnemonic"><a class="header" href="#getderivedhdaddressfromencryptedmnemonic"><strong>getDerivedHDAddressFromEncryptedMnemonic</strong></a></h3>
+<p><code>int getDerivedHDAddressFromEncryptedMnemonic(const uint32_t account, const uint32_t index, const CHANGE_LEVEL change_level, const PASS pass, char* p2pkh_pubkey, const bool is_testnet, const int file_num);</code></p>
+<p>This function generates a new Dogecoin address from an encrypted mnemonic and a slip44 key path. The function returns 0 on success and -1 on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">
+#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+    int addressLen = P2PKHLEN;
+    char derived_address[addressLen];
+
+    if (getDerivedHDAddressFromEncryptedMnemonic(0, 0, BIP44_CHANGE_EXTERNAL, NULL, derived_address, false, TEST_FILE) == 0) {
+        printf("Derived address: %s\n", derived_address);
+    } else {
+        printf("Error occurred.\n");
+        return -1;
+    }
+}
+</code></pre>
+<hr />
+<h3 id="getderivedhdaddressfromencryptedhdnode"><a class="header" href="#getderivedhdaddressfromencryptedhdnode"><strong>getDerivedHDAddressFromEncryptedHDNode</strong></a></h3>
+<p><code>int getDerivedHDAddressFromEncryptedHDNode(const uint32_t account, const uint32_t index, const CHANGE_LEVEL change_level, char* p2pkh_pubkey, const bool is_testnet, const int file_num);</code></p>
+<p>This function generates a new Dogecoin address from an encrypted HD node and a slip44 key path. The function returns 0 on success and -1 on failure.</p>
+<p><em>C usage:</em></p>
+<pre><code class="language-C">
+#include "libdogecoin.h"
+#include &lt;stdio.h&gt;
+
+int main() {
+    int addressLen = P2PKHLEN;
+    char derived_address[addressLen];
+
+    if (getDerivedHDAddressFromEncryptedHDNode(0, 0, BIP44_CHANGE_EXTERNAL, derived_address, false, TEST_FILE) == 0) {
+        printf("Derived address: %s\n", derived_address);
+    } else {
+        printf("Error occurred.\n");
+        return -1;
+    }
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="getting_started.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="eckey.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="getting_started.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="eckey.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="editor.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

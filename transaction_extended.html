@@ -1,0 +1,340 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Transaction Extended - Libdogecoin, a clean C library of Dogecoin building blocks</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C library (and series of bindings to popular languages) which will allow anyone to build a Dogecoin compliant product, without needing to worry about the deeper, complicated specifics of the crypto functions.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Libdogecoin, a clean C library of Dogecoin building blocks</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/dogecoinfoundation/libdogecoin/tree/main/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/dogeorg/libdogecoin-docs/edit/main/src/transaction_extended.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h3 id="dogecoin-transaction-overview"><a class="header" href="#dogecoin-transaction-overview">Dogecoin Transaction Overview</a></h3>
+<p>The <code>dogecoin_tx</code> structure describes a dogecoin transaction in reply to getdata. When a bloom filter is applied tx objects are sent automatically for matching transactions following the merkleblock. It is composed of the following fields:</p>
+<div class="table-wrapper"><table><thead><tr><th>Field Size</th><th>Description</th><th>Data type</th><th>Comments</th></tr></thead><tbody>
+<tr><td>4</td><td>version</td><td>uint32_t</td><td>Transaction data format version</td></tr>
+<tr><td>1+</td><td>tx_in count</td><td>var_int</td><td>Number of Transaction inputs (never zero)</td></tr>
+<tr><td>41+</td><td>tx_in</td><td>tx_in[]</td><td>A list of 1 or more transaction inputs or sources for coins</td></tr>
+<tr><td>1+</td><td>tx_out count</td><td>var_int</td><td>Number of Transaction outputs</td></tr>
+<tr><td>9+</td><td>tx_out</td><td>tx_out[]</td><td>A list of 1 or more transaction outputs or destinations for coins</td></tr>
+<tr><td>4</td><td>lock_time</td><td>uint32_t</td><td>The block number or timestamp at which this transaction is unlocked: 0 == not locked, &lt; 500000000 == Block number at which this transaction is unlocked, &gt;= 500000000 == UNIX timestamp at which this transaction is unlocked. If all TxIn have final (0xffffffff) sequence numbers then lock_time is irrelevant. Otherwise, the transaction may not be added to a block until after lock_time (see NLockTime).</td></tr>
+</tbody></table>
+</div>
+<p><code>include/dogecoin/tx.h</code>:</p>
+<pre><code>typedef struct dogecoin_tx_ {
+    int32_t version;
+    vector_t* vin;
+    vector_t* vout;
+    uint32_t locktime;
+} dogecoin_tx;
+</code></pre>
+<p>Every transaction is composed of inputs and outputs, which specify where the funds came from and where they will go. These are represented by the <code>dogecoin_tx_in</code> and <code>dogecoin_tx_out</code> structs below.</p>
+<h3 id="dogecoin-transaction-input"><a class="header" href="#dogecoin-transaction-input">Dogecoin Transaction Input</a></h3>
+<p>The <code>dogecoin_tx_in</code> structure consists of the following fields:</p>
+<div class="table-wrapper"><table><thead><tr><th>Field Size</th><th>Description</th><th>Data type</th><th>Comments</th></tr></thead><tbody>
+<tr><td>36</td><td>previous_output</td><td>outpoint</td><td>The previous output transaction reference, as an Outpoint structure</td></tr>
+<tr><td>1+</td><td>script_length</td><td>var_int</td><td>The length of the signature script</td></tr>
+<tr><td>?</td><td>signature_script</td><td>uchar[]</td><td>Computational Script for confirming transaction authorization</td></tr>
+<tr><td>4</td><td>sequence</td><td>uint32_t</td><td>Transaction version as defined by the sender. Intended for "replacement" of transactions when information is updated before inclusion into a block.</td></tr>
+</tbody></table>
+</div>
+<p><code>include/dogecoin/tx.h</code>:</p>
+<pre><code>typedef struct dogecoin_tx_in_ {
+    dogecoin_tx_outpoint prevout;
+    cstring* script_sig;
+    uint32_t sequence;
+} dogecoin_tx_in;
+</code></pre>
+<p>The <code>dogecoin_tx_outpoint</code> structure represented above as <code>prevout</code> consists of the following fields:</p>
+<div class="table-wrapper"><table><thead><tr><th>Field Size</th><th>Description</th><th>Data type</th><th>Comments</th></tr></thead><tbody>
+<tr><td>32</td><td>hash</td><td>char[32]</td><td>The hash of the referenced transaction</td></tr>
+<tr><td>4</td><td>index</td><td>uint32_t</td><td>The index of the specific output in the transaction. The first output is 0, etc.</td></tr>
+</tbody></table>
+</div>
+<p><code>include/dogecoin/tx.h</code>:</p>
+<pre><code>typedef struct dogecoin_tx_outpoint_ {
+    uint256_t hash;
+    uint32_t n;
+} dogecoin_tx_outpoint;
+</code></pre>
+<h3 id="dogecoin-transaction-output"><a class="header" href="#dogecoin-transaction-output">Dogecoin Transaction Output</a></h3>
+<p>The <code>dogecoin_tx_out</code> structure consists of the following fields:</p>
+<div class="table-wrapper"><table><thead><tr><th>Field Size</th><th>Description</th><th>Data type</th><th>Comments</th></tr></thead><tbody>
+<tr><td>8</td><td>value</td><td>int64_t</td><td>Transaction value</td></tr>
+<tr><td>1+</td><td>pk_script length</td><td>var_int</td><td>Length of the pk_script</td></tr>
+<tr><td>?</td><td>pk_script</td><td>uchar[]</td><td>Usually contains the public key as a dogecoin script setting up conditions to claim this output.</td></tr>
+</tbody></table>
+</div>
+<p><code>include/dogecoin/tx.h</code>:</p>
+<pre><code>typedef struct dogecoin_tx_out_ {
+    int64_t value;
+    cstring* script_pubkey;
+} dogecoin_tx_out;
+</code></pre>
+<h4 id="standard-transaction-to-dogecoin-address-pay-to-pubkey-hash"><a class="header" href="#standard-transaction-to-dogecoin-address-pay-to-pubkey-hash">Standard Transaction to Dogecoin Address (pay-to-pubkey-hash)</a></h4>
+<p>The <code>dogecoin_script</code> structure consists of a series of pieces of information and operations related to the value of the transaction. When notating scripts, data to be pushed to the stack is generally enclosed in angle brackets and data push commands are omitted. Non-bracketed words are opcodes. These examples include the "OP_" prefix, but it is permissible to omit it. Thus "<pubkey1> <pubkey2> OP_2 OP_CHECKMULTISIG" may be abbreviated to "<pubkey1> <pubkey2> 2 CHECKMULTISIG". Note that there is a small number of standard script forms that are relayed from node to node; non-standard scripts are accepted if they are in a block, but nodes will not relay them.</p>
+<pre><code>scriptPubKey: OP_DUP OP_HASH160 &lt;pubKeyHash&gt; OP_EQUALVERIFY OP_CHECKSIG
+scriptSig: &lt;sig&gt; &lt;pubKey&gt;
+</code></pre>
+<p>To demonstrate how scripts look on the wire, here is a raw scriptPubKey:</p>
+<pre><code>  76       A9             14
+OP_DUP OP_HASH160    Bytes to push
+
+89 AB CD EF AB BA AB BA AB BA AB BA AB BA AB BA AB BA AB BA   88         AC
+                      Data to push                     OP_EQUALVERIFY OP_CHECKSIG
+</code></pre>
+<h5 id="note-scriptsig-is-in-the-input-of-the-spending-transaction-and-scriptpubkey-is-in-the-output-of-the-previously-unspent-ie-available-transaction"><a class="header" href="#note-scriptsig-is-in-the-input-of-the-spending-transaction-and-scriptpubkey-is-in-the-output-of-the-previously-unspent-ie-available-transaction"><strong>Note: scriptSig is in the input of the spending transaction and scriptPubKey is in the output of the previously unspent i.e. "available" transaction.</strong></a></h5>
+<p>Here is how each word is processed:</p>
+<div class="table-wrapper"><table><thead><tr><th>Stack</th><th>Script</th><th>Description</th></tr></thead><tbody>
+<tr><td>Empty</td><td><code>&lt;sig&gt; &lt;pubKey&gt;</code> OP_DUP OP_HASH160 <code>&lt;pubKeyHash&gt;</code> OP_EQUALVERIFY OP_CHECKSIG</td><td>scriptSig and scriptPubKey are combined.</td></tr>
+<tr><td><code>&lt;sig&gt; &lt;pubKey&gt;</code></td><td>OP_DUP OP_HASH160 <code>&lt;pubKeyHash&gt;</code> OP_EQUALVERIFY OP_CHECKSIG</td><td>Constants are added to the stack.</td></tr>
+<tr><td><code>&lt;sig&gt; &lt;pubKey&gt; &lt;pubKey&gt;</code></td><td>OP_HASH160 <code>&lt;pubKeyHash&gt;</code> OP_EQUALVERIFY OP_CHECKSIG</td><td>Top stack item is duplicated.</td></tr>
+<tr><td><code>&lt;sig&gt; &lt;pubKey&gt; &lt;pubHashA&gt;</code></td><td><code>&lt;pubKeyHash&gt;</code> OP_EQUALVERIFY OP_CHECKSIG</td><td>Top stack item is hashed.</td></tr>
+<tr><td><code>&lt;sig&gt; &lt;pubKey&gt; &lt;pubHashA&gt; &lt;pubKeyHash&gt;</code></td><td>OP_EQUALVERIFY OP_CHECKSIG</td><td>Constant added.</td></tr>
+<tr><td><code>&lt;sig&gt; &lt;pubKey&gt;</code></td><td>OP_CHECKSIG</td><td>Equality is checked between the top two stack items.</td></tr>
+<tr><td>true</td><td>Empty</td><td>Signature is checked for top two stack items.</td></tr>
+</tbody></table>
+</div>
+<p><code>include/dogecoin/tx.h</code>:</p>
+<pre><code>typedef struct dogecoin_script_ {
+    int* data;
+    size_t limit;   // Total size of the vector
+    size_t current; //Number of vectors in it at present
+} dogecoin_script;
+</code></pre>
+<h5 id="-the-examples-above-were-derived-from-httpsenbitcoinit"><a class="header" href="#-the-examples-above-were-derived-from-httpsenbitcoinit">* <em>The examples above were derived from https://en.bitcoin.it</em></a></h5>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="transaction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="yubikey.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="transaction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="yubikey.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="editor.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

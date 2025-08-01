@@ -1,0 +1,485 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Log - Libdogecoin, a clean C library of Dogecoin building blocks</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C library (and series of bindings to popular languages) which will allow anyone to build a Dogecoin compliant product, without needing to worry about the deeper, complicated specifics of the crypto functions.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Libdogecoin, a clean C library of Dogecoin building blocks</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/dogecoinfoundation/libdogecoin/tree/main/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/dogeorg/libdogecoin-docs/edit/main/src/changelog.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
+<h2 id="released"><a class="header" href="#released">[Released]</a></h2>
+<h2 id="014---2025-04-10"><a class="header" href="#014---2025-04-10">[0.1.4] - 2025-04-10</a></h2>
+<h2 id="whats-changed"><a class="header" href="#whats-changed">What's Changed</a></h2>
+<ul>
+<li>merge v0.1.3 into main by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/204</li>
+<li>added 'tbs' library link by @UsaRandom in https://github.com/dogecoinfoundation/libdogecoin/pull/205</li>
+<li>net: added disconnected state for shutdown by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/207</li>
+<li>src: added intel assembly for sha algs by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/208</li>
+<li>ci: comment out arm64-macos due to gh billing by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/209</li>
+<li>build: require secp256k1 build first in Makefile by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/211</li>
+<li>ci: pin macos version to 12 instead of latest by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/214</li>
+<li>net: added http server by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/212</li>
+<li>blockchain: moved chainwork to blockindex by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/213</li>
+<li>crypto: adds chacha20 and fast_random_context by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/210</li>
+<li>fix DragonFlyBSD 6.4-RELEASE support by @movepointsolutions in https://github.com/dogecoinfoundation/libdogecoin/pull/182</li>
+<li>Make getDerivedHDAddress return address, not key by @chromatic in https://github.com/dogecoinfoundation/libdogecoin/pull/218</li>
+<li>spvnode: move http callback function to it's own respective file by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/220</li>
+<li>fixate 0.1.4-dogebox-pre by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/221</li>
+<li>[feat] Add Key Management Enclaves with YubiKey and NanoPC-T6 Support by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/223</li>
+<li>config: add -levent_core to AC_CHECK_LIB for event_extra by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/225</li>
+<li>ci: added 'tags' to 'on:' for sign actions by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/227</li>
+<li>ci: updated runner to macos-13 by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/229</li>
+<li>optee, openenclave: added custom key path parameter by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/238</li>
+<li>depends: disable libunistring for mingw32 by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/228</li>
+<li>src: updated reference and error handling in rest by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/226</li>
+<li>such: updated usage for public child keys by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/230</li>
+<li>chainparams: added backup dns seed by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/239</li>
+<li>add _t suffix to uint256, uint160 and vector types by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/240</li>
+<li>sha2: added armv8 and armv8.2 crypto by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/231</li>
+<li>rest: added getTimestamp endpoint by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/234</li>
+<li>rest: added getLastBlockInfo endpoint  by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/235</li>
+<li>rest: added utxo confirmations by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/236</li>
+<li>validation: check auxpow PoW before other checks by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/237</li>
+<li>ci: updated Windows signing certs and root by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/241</li>
+<li>optee: enable TRNG, add LIBDIR overrides, and switch fortify flag by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/242</li>
+<li>sha2: moved armv8 and armv82 guards by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/243</li>
+<li>ci: added windows native release and no tpm builds by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/244</li>
+<li>wallet: restore logic check by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/245</li>
+<li>cmake: restore flag settings by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/246</li>
+<li>docs: update changelog.md by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/247</li>
+<li>fixate 0.1.4 by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/248</li>
+<li>fixate gitian descriptors by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/249</li>
+<li>docs: re-update changelog.md by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/250</li>
+<li>depends: make yubikey depends selectable by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/251</li>
+<li>docs: finalize changelog.md by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/252</li>
+</ul>
+<h2 id="new-contributors"><a class="header" href="#new-contributors">New Contributors</a></h2>
+<ul>
+<li>@UsaRandom made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/205</li>
+<li>@movepointsolutions made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/182</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/dogecoinfoundation/libdogecoin/compare/v0.1.3...v0.1.4</p>
+<h2 id="013---2024-02-07"><a class="header" href="#013---2024-02-07">[0.1.3] - 2024-02-07</a></h2>
+<ul>
+<li>logdb: adds files and tests for spv node wallet database by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/110.</li>
+<li>depends: add build support for arm64-apple-darwin by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/111.</li>
+<li>added libdogecoin-config.h to install by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/112.</li>
+<li>ci/codeql: bump node.js actions from 12 to 16 by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/113.</li>
+<li>config: added config flag for unistring by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/115.</li>
+<li>spv/wallet: add files and tests by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/117.</li>
+<li>cmake: added use_unistring symbol by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/118.</li>
+<li>additional secp256k1 source exclusions by @Eshnek in https://github.com/dogecoinfoundation/libdogecoin/pull/119.</li>
+<li>spvnode/wallet: support multiple watch addresses per init by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/120.</li>
+<li>qa: omit p2wpkh section from test_wallet by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/121.</li>
+<li>build: enable building shared lib via cmake by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/122.</li>
+<li>fix minor typo in readme by @themagic314 in https://github.com/dogecoinfoundation/libdogecoin/pull/123.</li>
+<li>ci: update mac osx sdk checksum by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/124.</li>
+<li>scrypt: add files and test by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/125.</li>
+<li>bug-fix: python wrapper missing unistring by @joijuke in https://github.com/dogecoinfoundation/libdogecoin/pull/126.</li>
+<li>python wrapper better setup practice by @joijuke in https://github.com/dogecoinfoundation/libdogecoin/pull/127.</li>
+<li>wallet: add get vout and amount functions and expose koinu str funcs by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/128.</li>
+<li>restruct python wrapper by @joijuke in https://github.com/dogecoinfoundation/libdogecoin/pull/129.</li>
+<li>map: add files and use in deserialize_dogecoin_auxpow_block by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/130.</li>
+<li>wallet: fix rehydration of waddr_rbtree and route wtx to proper vector by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/131.</li>
+<li>spvnode: added wallet files by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/132.</li>
+<li>wallet: make dogecoin_wallet_scrape_utxos account for edge case by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/133.</li>
+<li>map: remove extraneous swap_bytes function from map.c by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/134.</li>
+<li>qa/spv: shorten block duration on ibd and switch to testnet for spv_test by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/135.</li>
+<li>wrappers: remove wrappers dir, decouple from ci/codeql by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/136.</li>
+<li>spvnode: added headers files by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/137.</li>
+<li>wallet: prevent duplicate utxos from being added to unspent vector by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/138.</li>
+<li>depends: add support for android by @alamshafil in https://github.com/dogecoinfoundation/libdogecoin/pull/140.</li>
+<li>wallet: fix dogecoin_wallet_unregister_watch_address_with_node by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/142.</li>
+<li>0.1.3 dev expose tools by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/143.</li>
+<li>validation: adds block and header checks by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/144.</li>
+<li>lib: expose p2pkh utility functions by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/145.</li>
+<li>dogecoin_tx_out function in header by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/147.</li>
+<li>Added bip and private key utilities by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/148.</li>
+<li>address: adds getHDNodeAndExtKeyByPath, getHDNodePrivateKeyWIFByPath by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/151.</li>
+<li>TPM2 crypto for mnemonics, seeds and keys on windows by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/153.</li>
+<li>Improve HD address derivation by @chromatic in https://github.com/dogecoinfoundation/libdogecoin/pull/154.</li>
+<li>lib: added key string constants, chainparams and bip32/44 wrappers by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/158.</li>
+<li>0.1.3 dev openenclave by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/159.</li>
+<li>cli: addressed compiler warnings in such and spvnode by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/160.</li>
+<li>global updates to constants by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/162.</li>
+<li>software encrypt/decrypt with cli tools by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/163.</li>
+<li>validation: updated scrypt and pow by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/164.</li>
+<li>seal: added test_passwd to tpm functions by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/165.</li>
+<li>seal: added dogecoin_free and dogecoin_mem_zero of passwords by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/166.</li>
+<li>spvnode: updated usage by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/167.</li>
+<li>docs: updated tools.md for spvnode by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/168.</li>
+<li>utils: added getpass by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/169.</li>
+<li>seal: added encrypted store directory by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/170.</li>
+<li>vector: updated memory allocation in deserialize by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/171.</li>
+<li>validation: added scrypt-sse2 by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/172.</li>
+<li>block: added parent merkle check for auxpow by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/173.</li>
+<li>hash: added dogecoin_hashwriter_free by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/174.</li>
+<li>such: fix mantissa during tx edit by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/175.</li>
+<li>ci/ql: added enable-test-passwd option by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/176.</li>
+<li>tx: emulate tx_in witness_stack vector in tx deser by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/177.</li>
+<li>wallet: free waddrs in dogecoin_wallet_init by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/178.</li>
+<li>headersdb_file: updated dogecoin_headers_db_connect_hdr to reorg by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/179.</li>
+<li>wallet: redesign utxo and radio doge functions by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/180.</li>
+<li>net: updated check to connect nodes by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/183.</li>
+<li>ci: added sign jobs for windows and macos by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/184.</li>
+<li>wallet: added prompt to dogecoin_wallet_load by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/185.</li>
+<li>chainparams: update chain_from_b58_prefix to detect testnet and regtest by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/187.</li>
+<li>wallet: clear memory leaks from radio doge functions by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/188.</li>
+<li>spv: removed reject on invalid block by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/189.</li>
+<li>headersdb_file: updated reorg to find common ancestor with memcmp by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/190.</li>
+<li>ci: added tag check to sign actions by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/191.</li>
+<li>ci: added test for aarch64-android by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/192.</li>
+<li>bip39: added fclose to error conditions by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/193.</li>
+<li>spv: optimize initial block download by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/194.</li>
+<li>ci: reduced uploads for signed builds by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/195.</li>
+<li>tool: updated pubkey_from_privatekey param by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/196.</li>
+<li>gitian: bump build system to focal from bionic by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/197.</li>
+<li>cmake: added build type for msvc by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/198.</li>
+<li>trivial: add copyright script and update copyrights by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/199.</li>
+<li>doc: update changelog.md authored by @edtubbs and committed by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/201.</li>
+<li>ci: bump to actions/cache@v4 for android by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/202.</li>
+<li>ci: config arm64-apple-darwin runner by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/203.</li>
+<li>fixate v0.1.3 by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/200.</li>
+</ul>
+<h2 id="new-contributors-1"><a class="header" href="#new-contributors-1">New Contributors</a></h2>
+<ul>
+<li>@alamshafil made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/140</li>
+<li>@Eshnek made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/119</li>
+<li>@joijuke made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/126</li>
+<li>@chromatic made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/154</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/dogecoinfoundation/libdogecoin/compare/v0.1.2...v0.1.3</p>
+<h2 id="012---2023-03-22"><a class="header" href="#012---2023-03-22">[0.1.2] - 2023-03-22</a></h2>
+<h2 id="whats-changed-1"><a class="header" href="#whats-changed-1">What's Changed</a></h2>
+<ul>
+<li>doc: update transaction signing definitions by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/82</li>
+<li>build: fix up cmake on linux by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/90</li>
+<li>libdogecoin: added wrapper for bip39 by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/91</li>
+<li>ci: bump i686-pc-linux-gnu from bionic to focal by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/95</li>
+<li>build: add msvs support with cmake by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/93</li>
+<li>docs: added bip39 seedphrases and libunistring by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/96</li>
+<li>0.1.2 dev QR support by @michilumin in https://github.com/dogecoinfoundation/libdogecoin/pull/94</li>
+<li>utils: add dogecoin_network_enabled function by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/87</li>
+<li>utils: fix missing libdogecoin-config header by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/97</li>
+<li>added jpeg qr functionality using a modified version of jpec by @michilumin in https://github.com/dogecoinfoundation/libdogecoin/pull/100</li>
+<li>docs: finalize derived hd address functions by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/99</li>
+<li>constants: add header with address definitions by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/101</li>
+<li>doc: updated guidance on bip39 by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/102</li>
+<li>build: add extra line to eof's by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/103</li>
+<li>Add Moon Files by @qlpqlp in https://github.com/dogecoinfoundation/libdogecoin/pull/98</li>
+<li>sign: add message signing and verification by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/104</li>
+<li>Add key to signing-keys by @edtubbs in https://github.com/dogecoinfoundation/libdogecoin/pull/106</li>
+<li>build: combine libunistring.a in gitian descriptors by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/107</li>
+<li>docs: update changelog.md by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/108</li>
+<li>fixate 0.1.2 as release by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/109</li>
+</ul>
+<h2 id="new-contributors-2"><a class="header" href="#new-contributors-2">New Contributors</a></h2>
+<ul>
+<li>@edtubbs made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/91</li>
+<li>@qlpqlp made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/98</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/dogecoinfoundation/libdogecoin/compare/v0.1.1...v0.1.2</p>
+<h2 id="released-1"><a class="header" href="#released-1">[Released]</a></h2>
+<h2 id="011---2022-10-03"><a class="header" href="#011---2022-10-03">[0.1.1] - 2022-10-03</a></h2>
+<h2 id="whats-changed-2"><a class="header" href="#whats-changed-2">What's Changed</a></h2>
+<ul>
+<li>fixate 0.1.0 by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/59</li>
+<li>open 0.1.1-dev for development by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/60</li>
+<li>Fix all go get errors caused by rename by @quackduck in https://github.com/dogecoinfoundation/libdogecoin/pull/64</li>
+<li>fix bad path for python wrapper in docs by @just-an-dev in https://github.com/dogecoinfoundation/libdogecoin/pull/68</li>
+<li>Fix for dogecoin_script_copy_without_op_codeseperator todo by @nooperation in https://github.com/dogecoinfoundation/libdogecoin/pull/72</li>
+<li>Remove VLAs (variable-length-arrays) from the code.  Fix some allocations. by @michilumin in https://github.com/dogecoinfoundation/libdogecoin/pull/75</li>
+<li>Fixed memory cleanup issue in dogecoin_base58_encode_check and updated its declaration by @nooperation in https://github.com/dogecoinfoundation/libdogecoin/pull/76</li>
+<li>address: fix memleaks caused from excessive key lengths by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/77</li>
+<li>address: adds getDerivedHDAddress functions by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/78</li>
+<li>Fixed command and ouputs for HD by @nformant1 in https://github.com/dogecoinfoundation/libdogecoin/pull/79</li>
+<li>(API Change) Fixed the truncation of size_t's to int's in some places by @nooperation in https://github.com/dogecoinfoundation/libdogecoin/pull/80</li>
+</ul>
+<h2 id="new-contributors-3"><a class="header" href="#new-contributors-3">New Contributors</a></h2>
+<ul>
+<li>@quackduck made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/64</li>
+<li>@just-an-dev made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/68</li>
+<li>@nooperation made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/72</li>
+<li>@nformant1 made their first contribution in https://github.com/dogecoinfoundation/libdogecoin/pull/79</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/dogecoinfoundation/libdogecoin/compare/v0.1.0...v0.1.1</p>
+<h2 id="released-2"><a class="header" href="#released-2">[Released]</a></h2>
+<h2 id="010---2022-08-05"><a class="header" href="#010---2022-08-05">[0.1.0] - 2022-08-05</a></h2>
+<h2 id="whats-changed-3"><a class="header" href="#whats-changed-3">What's Changed</a></h2>
+<ul>
+<li>docs: mv diagrams/ to doc/ and amend README.md by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/6</li>
+<li>0.1-dev-autoreconf by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/8</li>
+<li>qa: omit python from codeql by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/9</li>
+<li>crypto: sha2, rmd160 by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/11</li>
+<li>deps: bitcoin-core/secp256k1 subtree by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/12</li>
+<li>feature: address by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/13</li>
+<li>Example doc format by @tjstebbing in https://github.com/dogecoinfoundation/libdogecoin/pull/15</li>
+<li>Creating first Python wrapper PR by @jaxlotl in https://github.com/dogecoinfoundation/libdogecoin/pull/14</li>
+<li>qa: address_test by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/18</li>
+<li>contrib: formatting by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/21</li>
+<li>Verify address by @jaxlotl in https://github.com/dogecoinfoundation/libdogecoin/pull/22</li>
+<li>mem: fix memleaks by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/24</li>
+<li>Python module refactoring by @jaxlotl in https://github.com/dogecoinfoundation/libdogecoin/pull/25</li>
+<li>Fixing compiler warnings - new_line by @DrinoSan in https://github.com/dogecoinfoundation/libdogecoin/pull/29</li>
+<li>Documentation by @jaxlotl in https://github.com/dogecoinfoundation/libdogecoin/pull/27</li>
+<li>Fixing unit_tests - Increase size of char array by @DrinoSan in https://github.com/dogecoinfoundation/libdogecoin/pull/32</li>
+<li>C improved tests by @jaxlotl in https://github.com/dogecoinfoundation/libdogecoin/pull/31</li>
+<li>Setting fixed size for priv and pubkeys in generatePrivPubKeypair and… by @DrinoSan in https://github.com/dogecoinfoundation/libdogecoin/pull/34</li>
+<li>such: transaction by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/33</li>
+<li>security: refactor koinu conversion functions by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/42</li>
+<li>ci: fix apt-get update step for i686-w64-mingw32 by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/45</li>
+<li>issue template updated to prevent spam in repository by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/44</li>
+<li>transaction: remove all refs to segwit and bech32 by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/46</li>
+<li>security: implement refactored conversion functions by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/43</li>
+<li>trivial: fix up headers by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/47</li>
+<li>include: delete valgrind/valgrind.h by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/48</li>
+<li>cmake: add koinu to CMakeLists.txt by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/49</li>
+<li>crypto: fix mismatched bound on sha256/512_finalize by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/51</li>
+<li>tx: remove bloat from dogecoin_tx_sign_input by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/52</li>
+<li>net: move broadcast_tx from tx to net by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/50</li>
+<li>trivial: fix remaining GCC warnings/errors by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/53</li>
+<li>contrib: update expired signing key for xanimo by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/55</li>
+<li>build: backport autotools/gitian build system by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/54</li>
+<li>doc: update changelog by @xanimo in https://github.com/dogecoinfoundation/libdogecoin/pull/58</li>
+</ul>
+<h2 id="contributors"><a class="header" href="#contributors">Contributors</a></h2>
+<ul>
+<li>@DrinoSan</li>
+<li>@jaxlotl</li>
+<li>@michilumin</li>
+<li>@tjstebbing</li>
+<li>@xanimo</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/dogecoinfoundation/libdogecoin/commits/main</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="release-process.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="release-process.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="editor.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

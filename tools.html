@@ -1,0 +1,632 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Tools - Libdogecoin, a clean C library of Dogecoin building blocks</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C library (and series of bindings to popular languages) which will allow anyone to build a Dogecoin compliant product, without needing to worry about the deeper, complicated specifics of the crypto functions.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Libdogecoin, a clean C library of Dogecoin building blocks</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/dogecoinfoundation/libdogecoin/tree/main/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/dogeorg/libdogecoin-docs/edit/main/src/tools.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="using-libdogecoin-tools"><a class="header" href="#using-libdogecoin-tools">Using Libdogecoin Tools</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>If you are looking to just explore the functionality of Libdogecoin without building a complicated project yourself, look no further than the CLI tools provided in this repo. The first tool, <code>such</code>, is an interactive CLI application that allows you to perform all Essential address and transaction operations with prompts to guide you through the process. The second tool, <code>sendtx</code>, handles the process of broadcasting a transaction built using Libdogecoin to eventually push it onto the blockchain. The third tool, <code>spvnode</code>, run a Simple Payment Verification (SPV) node for the Dogecoin blockchain. It enables users to interact with the Dogecoin network, verify transactions and stay in sync with the blockchain.</p>
+<p>This document goes over the usage of these tools along with examples of how to use them.</p>
+<h2 id="the-such-tool"><a class="header" href="#the-such-tool">The <code>such</code> Tool</a></h2>
+<p>As stated above, the <code>such</code> tool can be used to perform all Libdogecoin address and transaction functions, and even more. It can generate different types of public and private keys, derive and convert keys, and fully build and sign transactions.</p>
+<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
+<p>The <code>such</code> tool can be used by simply running the command <code>./such</code> in the top level of the Libdogecoin directory, always followed by a <code>-c</code> flag that denotes the desired <code>such</code> command to run. The options for this command are below:</p>
+<ul>
+<li>generate_private_key</li>
+<li>generate_public_key</li>
+<li>p2pkh</li>
+<li>bip32_extended_master_key</li>
+<li>derive_child_keys</li>
+<li>generate_mnemonic</li>
+<li>list_encryption_keys_in_tpm</li>
+<li>decrypt_master_key</li>
+<li>decrypt_mnemonic</li>
+<li>seed_to_master_key</li>
+<li>mnemonic_to_key</li>
+<li>mnemonic_to_addresses</li>
+<li>print_keys</li>
+<li>sign</li>
+<li>comp2der</li>
+<li>bip32maintotest</li>
+<li>signmessage</li>
+<li>verify_message</li>
+<li>transaction</li>
+</ul>
+<p>So an example run of <code>such</code> could be something like this:</p>
+<pre><code>./such -c generate_private_key
+</code></pre>
+<p>Most of these commands require a flag following them to denote things like existing keys, transaction hex strings, and more:</p>
+<div class="table-wrapper"><table><thead><tr><th>Flag</th><th>Name</th><th>Required Arg?</th><th>Usage</th></tr></thead><tbody>
+<tr><td>-p, --privkey</td><td>private_key</td><td>yes</td><td>generate_public_key -p &lt;private_key&gt;</td></tr>
+<tr><td>-k, --pubkey</td><td>public_key</td><td>yes</td><td>p2pkh -k &lt;public_key&gt;</td></tr>
+<tr><td>-m, --derived_path</td><td>derived_path</td><td>yes</td><td>derive_child_key -p &lt;extended_private_key&gt; -m &lt;derived_path&gt;</td></tr>
+<tr><td>-e, --entropy</td><td>hex_entropy</td><td>yes</td><td>generate_mnemonic -e &lt;hex_entropy&gt;</td></tr>
+<tr><td>-n, --mnemonic</td><td>seed_phrase</td><td>yes</td><td>mnemonic_to_key or mnemonic_to_addresses -n &lt;seed_phrase&gt;</td></tr>
+<tr><td>-a, --pass_phrase</td><td>pass_phrase</td><td>no</td><td>mnemonic_to_key or mnemonic_to_addresses -n &lt;seed_phrase&gt; -a</td></tr>
+<tr><td>-o, --account_int</td><td>account_int</td><td>yes</td><td>mnemonic_to_key or mnemonic_to_addresses -n &lt;seed_phrase&gt; -o &lt;account_int&gt;</td></tr>
+<tr><td>-g, --change_level</td><td>change_level</td><td>yes</td><td>mnemonic_to_key or mnemonic_to_addresses -n &lt;seed_phrase&gt; -g &lt;change_level&gt;</td></tr>
+<tr><td>-i, --address_index</td><td>address_index</td><td>yes</td><td>mnemonic_to_key or mnemonic_to_addresses -n &lt;seed_phrase&gt; -i &lt;address_index&gt;</td></tr>
+<tr><td>-y, --encrypted_file</td><td>file_num</td><td>yes</td><td>generate_mnemonic, bip32_extended_master_key, decrypt_master_key, decrypt_mnemonic, seed_to_master_key, mnemonic_to_key or mnemonic_to_addresses -y &lt;file_num&gt;</td></tr>
+<tr><td>-w, --overwrite</td><td>overwrite</td><td>no</td><td>generate_mnemonic or bip32_extended_master_key -w</td></tr>
+<tr><td>-b, --silent</td><td>silent</td><td>no</td><td>generate_mnemonic or bip32_extended_master_key -b</td></tr>
+<tr><td>-j, --use_tpm</td><td>use_tpm</td><td>no</td><td>generate_mnemonic, bip32_extended_master_key, decrypt_master_key, decrypt_mnemonic, seed_to_master_key, mnemonic_to_key or mnemonic_to_addresses -j</td></tr>
+<tr><td>-t, --testnet</td><td>designate_testnet</td><td>no</td><td>generate_private_key -t</td></tr>
+<tr><td>-s</td><td>script_hex</td><td>yes</td><td>comp2der -s &lt;compact_signature&gt;</td></tr>
+<tr><td>-x</td><td>transaction_hex</td><td>yes</td><td>sign -x &lt;transaction_hex&gt; -s &lt;pubkey_script&gt; -i &lt;index_of_utxo_to_sign&gt; -h &lt;sig_hash_type&gt;</td></tr>
+<tr><td>-i</td><td>input_index</td><td>yes</td><td>see above</td></tr>
+<tr><td>-h</td><td>sighash_type</td><td>yes</td><td>see above</td></tr>
+</tbody></table>
+</div>
+<p>Below is a list of all the commands and the flags that they require. As a reminder, any command that includes the <code>-t</code> flag will set the default chain used in internal calculations to <em>testnet</em> rather than <em>mainnet</em>. Also included are descriptions of what each function does.</p>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th>Required flags</th><th>Optional flags</th><th>Description</th></tr></thead><tbody>
+<tr><td>generate_private_key</td><td>None</td><td>-t</td><td>Generates a private key from a secp256k1 context for either mainnet or testnet.</td></tr>
+<tr><td>generate_public_key</td><td>-p</td><td>-t</td><td>Generates a public key derived from the private key specified. Include the testnet flag if it was generated from testnet.</td></tr>
+<tr><td>p2pkh</td><td>-k</td><td>-t</td><td>Generates a p2pkh address derived from the public key specified. Include the testnet flag if it was generated from testnet.</td></tr>
+<tr><td>bip32_extended_master_key</td><td>None</td><td>-t</td><td>Generate an extended master private key from a secp256k1 context for either mainnet or testnet.</td></tr>
+<tr><td>bip32maintotest</td><td>-p</td><td>None</td><td>Convert a mainnet private key into an equivalent testnet key.</td></tr>
+<tr><td>derive_child_keys</td><td>-p, -m</td><td>-t</td><td>Generates a child key derived from the specified public or private key using the specified derivation path.</td></tr>
+<tr><td>generate_mnemonic</td><td>None</td><td>-e, -y, -w, -b</td><td>Generates a 24-word english seed phrase randomly or from optional hex entropy.</td></tr>
+<tr><td>list_encryption_keys_in_tpm</td><td>None</td><td>None</td><td>List the encryption keys in the TPM.</td></tr>
+<tr><td>decrypt_master_key</td><td>-y</td><td>-j</td><td>Decrypt the master key with the TPM or SW.</td></tr>
+<tr><td>decrypt_mnemonic</td><td>-y</td><td>-j</td><td>Decrypt the mnemonic with the TPM or SW.</td></tr>
+<tr><td>seed_to_master_key</td><td>-y</td><td>-j, -t</td><td>Generates an extended master private key from a seed for either mainnet or testnet.</td></tr>
+<tr><td>mnemonic_to_key</td><td>-n</td><td>-a, -y, -o, g, -i, -t</td><td>Generates a private key from a seed phrase with a default path or specified account, change level and index for either mainnet or testnet.</td></tr>
+<tr><td>mnemonic_to_addresses</td><td>-n</td><td>-a, -y, -o, g, -i, -t</td><td>Generates an address from a seed phrase with a default path or specified account, change level and index for either mainnet or testnet.</td></tr>
+<tr><td>print_keys</td><td>-p</td><td>-t</td><td>Print all keys associated with the provided private key.</td></tr>
+<tr><td>sign</td><td>-x, -s, -i, -h, -p</td><td>-t</td><td>See the definition of sign_raw_transaction in the Transaction API.</td></tr>
+<tr><td>comp2der</td><td>-s</td><td>None</td><td>Convert a compact signature to a DER signature.</td></tr>
+<tr><td>signmessage</td><td>-x, -p</td><td>None</td><td>Sign a message and output a base64 encoded signature and address.</td></tr>
+<tr><td>verify_message</td><td>-x, -s, -k</td><td>None</td><td>Verify a message by public key recovery of base64 decoded signature and comparison of addresses.</td></tr>
+<tr><td>transaction</td><td>None</td><td>None</td><td>Start the interactive transaction app. <a href="">Usage instructions below.</a></td></tr>
+</tbody></table>
+</div>
+<p>Lastly, to display the version of <code>such</code>, simply run the following command, which overrides any previous ones specified:</p>
+<pre><code>./such -v
+</code></pre>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
+<p>Below are some examples on how to use the <code>such</code> tool in practice.</p>
+<h5 id="generate-a-new-private-key-wif-and-hex-encoded"><a class="header" href="#generate-a-new-private-key-wif-and-hex-encoded">Generate a new private key WIF and hex encoded:</a></h5>
+<pre><code>./such -c generate_private_key
+&gt; privatekey WIF: QSPDnjzvrSPAeiM7N2jCkzv2dqsi7fxoHipgpPfz2zdE3ZpYp74j
+&gt; privatekey HEX: 7073fa30281cf89195dca333134368d539e7abad712abb532c9eaf5f3666d9d1
+</code></pre>
+<h5 id="generate-the-public-key-p2pkh-and-p2sh-p2pkh-address-from-a-wif-encoded-private-key"><a class="header" href="#generate-the-public-key-p2pkh-and-p2sh-p2pkh-address-from-a-wif-encoded-private-key">Generate the public key, p2pkh, and p2sh-p2pkh address from a WIF encoded private key</a></h5>
+<pre><code>./such -c generate_public_key -p QSPDnjzvrSPAeiM7N2jCkzv2dqsi7fxoHipgpPfz2zdE3ZpYp74j
+&gt; pubkey: 02cf2c99c2db4b3d72d4289aa23bdaf5f3ccf4867ec8e5f8223ea716a7a3de10bc
+&gt; p2pkh address: D62RKK6AGkzX6fM8RzoVM8fjPx2nzrdvKU
+</code></pre>
+<h5 id="generate-the-p2pkh-address-from-a-hex-encoded-compact-public-key"><a class="header" href="#generate-the-p2pkh-address-from-a-hex-encoded-compact-public-key">Generate the P2PKH address from a hex encoded compact public key</a></h5>
+<pre><code>./such -c generate_public_key -pubkey 02cf2c99c2db4b3d72d4289aa23bdaf5f3ccf4867ec8e5f8223ea716a7a3de10bc
+&gt; p2pkh address: D62RKK6AGkzX6fM8RzoVM8fjPx2nzrdvKU
+</code></pre>
+<h5 id="generate-new-bip32-master-key"><a class="header" href="#generate-new-bip32-master-key">Generate new BIP32 master key</a></h5>
+<pre><code>./such -c bip32_extended_master_key
+&gt; masterkey: dgpv51eADS3spNJh9qLpW8S7B7uZmusTpNE85NgXsYD7eGuVhebMDfEsj6fNR6DHgpSBCmYdAvw9YRSqRWnFxtYn1bM8AdNipwdi9dDXFCY8vkY
+</code></pre>
+<h5 id="print-hd-node"><a class="header" href="#print-hd-node">Print HD node</a></h5>
+<pre><code>./such -c print_keys -privkey dgpv51eADS3spNJh9qLpW8S7B7uZmusTpNE85NgXsYD7eGuVhebMDfEsj6fNR6DHgpSBCmYdAvw9YRSqRWnFxtYn1bM8AdNipwdi9dDXFCY8vkY
+&gt; ext key:             dgpv51eADS3spNJh9qLpW8S7B7uZmusTpNE85NgXsYD7eGuVhebMDfEsj6fNR6DHgpSBCmYdAvw9YRSqRWnFxtYn1bM8AdNipwdi9dDXFCY8vkY
+&gt; extended pubkey:     dgub8kXBZ7ymNWy2SgzyYN45HyTAEUF6eVFqMyTk2ec6SPxWFhi3dRneNQ51zJadLERvA1ns9uvMGKM9wYKTSnCP9QrSPJMCKjdfSv4qmT3PkP2
+&gt; pubkey hex:          025368ca428b4c4e0c48631c5f8510d704858a52c7264d4ba74f34b2bcee374220
+&gt; privatekey WIF:      QTtXPXYWc4G6WuA6qNRYeQ3TAdsBUUqrLwN1eWVFEvfHdd8M1ed5
+&gt; depth:               0
+&gt; child index:         0
+&gt; p2pkh address:       D79Q3spkucaM2DvLxUZjgV1X4cQcWDLuyt
+</code></pre>
+<h5 id="derive-child-key-second-child-key-at-level-1-in-this-case"><a class="header" href="#derive-child-key-second-child-key-at-level-1-in-this-case">Derive child key (second child key at level 1 in this case)</a></h5>
+<pre><code>./such -c derive_child_keys -m m/1h -privkey dgpv51eADS3spNJh9qLpW8S7B7uZmusTpNE85NgXsYD7eGuVhebMDfEsj6fNR6DHgpSBCmYdAvw9YRSqRWnFxtYn1bM8AdNipwdi9dDXFCY8vkY
+&gt; ext key:             dgpv53gfwGVYiKVgf3hybqGjXuxrW2s2iCArhBURxAWaFszfqfP6wc23KFVyCuGj4fGzAX6oC8QmvhvkWz18v4VcdhzYCxoTR3XQizrVtjMwQHS
+&gt; extended pubkey:     dgub8nZhGxRSGUA1wuN8e4themWSxbEfYKCZynFe7GuZ413gPiVoMNZoxYucn8DQ5doeqt1cmZnxZ4Ms9SdsraiSbUkZSYbx1GzpGbrAqmFdSSL
+&gt; pubkey hex:          023973b755fdaf5b2b7b20ac134c936ec7882b1ce0a3a75857fc490c12cdf4fb4f
+&gt; privatekey WIF:      QQUwLsFpWWXsHFLCxjvBMn8Qd4Pgqji5QUXz6zN8vkiKMPvv7mpZ
+&gt; depth:               1
+&gt; child index:         -2147483647
+&gt; p2pkh address:       DFqonEEA56VE8zEGvhXNgjiPT3PaPFNQQu
+</code></pre>
+<h5 id="derive-public-child-key-second-child-key-at-level-2-in-this-case-non-hardened"><a class="header" href="#derive-public-child-key-second-child-key-at-level-2-in-this-case-non-hardened">Derive public child key (second child key at level 2 in this case, non-hardened)</a></h5>
+<pre><code>./such -c derive_child_keys -m m/1 -p dgub8sdBNNzYwKo1KKQcQoJXMDwEg3fgX52aY2aSuSGMXepn71kMtZoN7BVwWp7JT582EDT8djTpCMx7Nd62nJ8u8xNmszEXrmsHWf6XQccjiLg
+&gt; ext key:             dgub8q9VuPpS4NijK4e7Cc7WaKGD6QHjUB3YkJi83imYVvBRGjrKwPcNFjNcmNt2UnEuhFmKhcmo8aRQABUhq55H3ackUBGj3nJDTMpcP6ALoiN
+&gt; extended pubkey:     dgub8q9VuPpS4NijK4e7Cc7WaKGD6QHjUB3YkJi83imYVvBRGjrKwPcNFjNcmNt2UnEuhFmKhcmo8aRQABUhq55H3ackUBGj3nJDTMpcP6ALoiN
+&gt; pubkey hex:          02cbfea5f5cf7d28b9111e92f05356a39a64f19247e539b428ef91e70a6900ae71
+&gt; depth:               2
+&gt; child index:         1
+&gt; p2pkh address:       D7M52mS3ZTrPXgRmfjpV5pPSG2E2TsfZAi
+</code></pre>
+<h4 id="generate-a-random-bip39-seed-phrase"><a class="header" href="#generate-a-random-bip39-seed-phrase">Generate a random BIP39 seed phrase</a></h4>
+<h4 id="see-seed-phrases-in-addressmd-for-additional-guidance"><a class="header" href="#see-seed-phrases-in-addressmd-for-additional-guidance">See "Seed phrases" in address.md, for additional guidance</a></h4>
+<pre><code>./such -c generate_mnemonic
+&gt; they nuclear observe moral twenty gym hedgehog damage reveal syrup negative beach best silk alone feel vapor deposit belt host purity run clever deer
+</code></pre>
+<h4 id="generate-a-hd-master-key-from-the-seed-phrase-for-a-given-account-2-change-level-1-internal-and-index-0-for-testnet"><a class="header" href="#generate-a-hd-master-key-from-the-seed-phrase-for-a-given-account-2-change-level-1-internal-and-index-0-for-testnet">Generate a HD master key from the seed phrase for a given account (2), change level (1, internal) and index (0) for testnet</a></h4>
+<pre><code>./such -c mnemonic_to_key -n "they nuclear observe moral twenty gym hedgehog damage reveal syrup negative beach best silk alone feel vapor deposit belt host purity run clever deer" -o 2 -g 1 -i 0 -t
+&gt; keypath: m/44'/1'/2'/1/0
+&gt; private key (wif): cniAjMkD7HpzQKw67ByNsyzqMF8MEJo2y4viH2WEZRXoKHNih1sH
+</code></pre>
+<h4 id="generate-an-hd-address-from-the-seed-phrase-for-a-given-account-2-change-level-1-internal-and-index-0-for-testnet"><a class="header" href="#generate-an-hd-address-from-the-seed-phrase-for-a-given-account-2-change-level-1-internal-and-index-0-for-testnet">Generate an HD address from the seed phrase for a given account (2), change level (1, internal) and index (0) for testnet</a></h4>
+<pre><code>./such -c mnemonic_to_addresses -n "they nuclear observe moral twenty gym hedgehog damage reveal syrup negative beach best silk alone feel vapor deposit belt host purity run clever deer" -o 2 -g 1 -i 0 -t
+&gt; Address: nW7ndt4HZh8XwLYN6v6N2S4mZCbpZPuFxh
+</code></pre>
+<h4 id="generate-a-bip39-seed-phrase-from-hex-entropy"><a class="header" href="#generate-a-bip39-seed-phrase-from-hex-entropy">Generate a BIP39 seed phrase from hex entropy</a></h4>
+<pre><code>./such -c generate_mnemonic -e "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+&gt; zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo vote
+</code></pre>
+<h4 id="geneate-an-hd-address-from-the-seed-phrase-and-default-path-m443000-for-mainnet"><a class="header" href="#geneate-an-hd-address-from-the-seed-phrase-and-default-path-m443000-for-mainnet">Geneate an HD address from the seed phrase and default path (m/44'/3'/0'/0/0) for mainnet</a></h4>
+<pre><code>./such -c mnemonic_to_addresses -n "zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo vote"
+&gt; Address: DTdKu8YgcxoXyjFCDtCeKimaZzsK27rcwT
+</code></pre>
+<h4 id="sign-an-arbitrary-message"><a class="header" href="#sign-an-arbitrary-message">Sign an arbitrary message</a></h4>
+<pre><code>./such -c signmessage -x bleh -p QWCcckTzUBiY1g3GFixihAscwHAKXeXY76v7Gcxhp3HUEAcBv33i
+message: bleh
+content: ICrbftD0KamyaB68IoXbeke3w4CpcIvv+Q4pncBNpMk8fF5+xsR9H9gqmfM0JrjlfzZZA3E8AJ0Nug1KWeoVw3g=
+address: D8mQ2sKYpLbFCQLhGeHCPBmkLJRi6kRoSg
+</code></pre>
+<h4 id="verify-an-arbitrary-message"><a class="header" href="#verify-an-arbitrary-message">Verify an arbitrary message</a></h4>
+<pre><code>./such -c verifymessage -x bleh -s ICrbftD0KamyaB68IoXbeke3w4CpcIvv+Q4pncBNpMk8fF5+xsR9H9gqmfM0JrjlfzZZA3E8AJ0Nug1KWeoVw3g= -k D8mQ2sKYpLbFCQLhGeHCPBmkLJRi6kRoSg
+Message is verified!
+</code></pre>
+<h2 id="encrypted-mnemonics-key-and-seed-backups"><a class="header" href="#encrypted-mnemonics-key-and-seed-backups">Encrypted Mnemonics, Key and Seed Backups</a></h2>
+<p>The <code>such</code> tool provides functionality to securely manage your encrypted mnemonics, key and seed backups. With the ability to generate mnemonics and encrypt them for safe storage, and to decrypt them when needed, managing your cryptographic assets is made easier. To use encrypted files with <code>spvnode</code>, you must first use the <code>such</code> tool to generate and encrypt your mnemonic or master key. You can then use the <code>spvnode</code> tool to import the encrypted file and use it to connect to the network.</p>
+<h3 id="generating-and-encrypting-mnemonics"><a class="header" href="#generating-and-encrypting-mnemonics">Generating and Encrypting Mnemonics</a></h3>
+<p>To generate a new mnemonic, which is a 24-word seed phrase, you can use the following command:</p>
+<pre><code>./such -c generate_mnemonic
+</code></pre>
+<p>This will output a new mnemonic that you can use to generate keys and addresses. If you want to encrypt this mnemonic to keep it safe, you can use the following command:</p>
+<pre><code>./such -c generate_mnemonic -y &lt;file_num&gt;
+</code></pre>
+<p>The <code>-y</code> flag is used to specify the file number to use for encryption. This number is used to identify the encrypted file when you need to decrypt it. You can also use the <code>-w</code> flag to overwrite an existing file with the same number. If you want to encrypt the mnemonic using a TPM (Trusted Platform Module), you can use the <code>-j</code> flag as shown:</p>
+<pre><code>./such -c generate_mnemonic -y &lt;file_num&gt; -j
+</code></pre>
+<p>Replace <code>&lt;file_num&gt;</code> with the appropriate file number you want to use for encryption (e.g. 0, 1, 2, etc.). <code>999</code> is reserved for testing purposes.</p>
+<p>Encrypting a mnemonic will output a file with the encrypted mnemonic. You can use the <code>-b</code> flag to suppress the mnemonic output and only output the encrypted file. This is useful if you want to encrypt a mnemonic and save it to a file without displaying the mnemonic on the screen. For example:</p>
+<pre><code>./such -c generate_mnemonic -y &lt;file_num&gt; -b
+</code></pre>
+<p>All encryted files are saved in the store directory. On Linux, this is <code>.store</code> in the libdogecoin directory. On Windows, this is the <code>store</code> directory in the libdogecoin directory.</p>
+<h3 id="decrypting-mnemonics"><a class="header" href="#decrypting-mnemonics">Decrypting Mnemonics</a></h3>
+<p>When you need to access your encrypted mnemonic, you can decrypt it using the <code>decrypt_mnemonic</code> command. If the mnemonic was encrypted using TPM (Trusted Platform Module), you can use the <code>-j</code> flag as shown:</p>
+<pre><code>./such -c decrypt_mnemonic -y &lt;file_num&gt; -j
+</code></pre>
+<p>Replace <code>&lt;file_num&gt;</code> with the appropriate file number you used during encryption.</p>
+<h3 id="handling-key-backups"><a class="header" href="#handling-key-backups">Handling Key Backups</a></h3>
+<p>You can also encrypt and decrypt your master key using similar commands. To encrypt a master key, you might first generate it and then encrypt as follows:</p>
+<pre><code>./such -c bip32_extended_master_key -y &lt;file_num&gt; -j
+</code></pre>
+<p>And to decrypt it back when required:</p>
+<pre><code>./such -c decrypt_master_key -y &lt;file_num&gt; -j
+</code></pre>
+<p>Always ensure to replace <code>&lt;file_num&gt;</code> with the actual number of the encrypted file.</p>
+<h3 id="handling-seed-backups"><a class="header" href="#handling-seed-backups">Handling Seed Backups</a></h3>
+<p>You can also decrypt your seed backups using the <code>seed_to_master_key</code> command. This command will decrypt the seed and generate a master key from it. If the seed was encrypted using TPM (Trusted Platform Module), you can use the <code>-j</code> flag as shown:</p>
+<pre><code>./such -c seed_to_master_key -y &lt;file_num&gt; -j
+</code></pre>
+<h3 id="overwriting-encrypted-files"><a class="header" href="#overwriting-encrypted-files">Overwriting Encrypted Files</a></h3>
+<p>If you want to overwrite an existing encrypted file, you can use the <code>-w</code> flag as shown:</p>
+<pre><code>./such -c generate_mnemonic -y &lt;file_num&gt; -w
+</code></pre>
+<p>This will overwrite the existing file with the same number. You can also use the <code>-w</code> flag with the <code>bip32_extended_master_key</code> command to overwrite an existing encrypted master key.</p>
+<h3 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h3>
+<ul>
+<li><strong>Backup</strong>: Always backup your encrypted files in multiple secure locations. Adhering to the "rule of three" is advised, meaning you should have three copies of your data: the original, a primary backup, and a secondary backup, ideally kept in different locations to mitigate the risk of data loss due to environmental factors.</li>
+<li><strong>File Numbers</strong>: Encrypting files with the same file number will overwrite the previous file with the same number of that type. This is useful for overwriting old backups with new ones, but can be dangerous if you accidentally overwrite a file you need. Always keep track of your file numbers and what they are used for.</li>
+<li><strong>Security</strong>: Use a TPM where available for added security during encryption and decryption processes.  Encryption keys are stored in the TPM and never leave the TPM.  The TPM is a hardware device that is designed to be tamper resistant.  If you do not have a TPM, you can use software encryption and decryption, but this is less secure than using a TPM.</li>
+<li><strong>Overwrites</strong>: Overwriting encrypted files is irreversible. Files and backups encrypted with TPM cannot be decrypted once overwritten.  Files and backups encrypted with software can be decrypted with software, but the original file will be lost.</li>
+</ul>
+<h3 id="important-notes-general"><a class="header" href="#important-notes-general">Important Notes (General)</a></h3>
+<ul>
+<li>
+<p><strong>If you lose your encrypted files, you will not be able to decrypt your mnemonics or master keys.</strong></p>
+</li>
+<li>
+<p><strong>If you lose your mnemonic or master key, you will not be able to recover your coins.</strong></p>
+</li>
+<li>
+<p><strong>Overwriting encrypted files is irreversible.</strong></p>
+</li>
+</ul>
+<h3 id="important-notes-tpm-specific"><a class="header" href="#important-notes-tpm-specific">Important Notes (TPM-specific)</a></h3>
+<ul>
+<li>
+<p><strong>If you lose your TPM, you will not be able to decrypt your mnemonics or master keys.</strong></p>
+</li>
+<li>
+<p><strong>TPM encrypted files cannot be decrypted with software.</strong></p>
+</li>
+</ul>
+<p>These commands and flags are part of the <code>such</code> CLI tool's functionality, enabling a robust management system for your encrypted data within the Libdogecoin ecosystem.</p>
+<h3 id="interactive-transaction-building-with-such"><a class="header" href="#interactive-transaction-building-with-such">Interactive Transaction Building with <code>such</code></a></h3>
+<p>When you start the interactive <code>such</code> transaction tool with <code>./such -c transaction</code>, you will be faced with a menu of options. To choose one of these options to execute, simply type the number of that command and hit enter.</p>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody>
+<tr><td>add transaction</td><td>Start building a new transaction.</td></tr>
+<tr><td>edit transaction by id</td><td>Make changes to a transaction that has already been started.</td></tr>
+<tr><td>find transaction</td><td>Print out the hex of a transaction that has already been started.</td></tr>
+<tr><td>sign transaction</td><td>Sign the inputs of a finalized transaction.</td></tr>
+<tr><td>delete transaction</td><td>Remove an existing transaction from memory.</td></tr>
+<tr><td>delete all transactions</td><td>Remove all existing transactions from memory.</td></tr>
+<tr><td>print transactions</td><td>Start building a new transaction.</td></tr>
+<tr><td>import raw transaction</td><td>Saves the entered transaction hex as a transaction object in memory.</td></tr>
+<tr><td>broadcast transaction</td><td>Performs the same operation as [<code>./sendtx</code>] (#the-sendtx-tool) (<code>sendtx</code> recommended)</td></tr>
+<tr><td>change network</td><td>Specify the network for building transactions.</td></tr>
+<tr><td>quit</td><td>Exit the tool.</td></tr>
+</tbody></table>
+</div>
+<p>Once you choose a command, there will be on-screen prompts to guide your next actions. All of these commands internally call the functions that make up Libdogecoin, so for more information on what happens when these commands are run, please refer to the <a href="doc/../transaction.html">Libdogecoin Essential Transaction API</a>.</p>
+<h2 id="the-sendtx-tool"><a class="header" href="#the-sendtx-tool">The <code>sendtx</code> Tool</a></h2>
+<p>Now that you've built a sendable transaction with Libdogecoin, <code>sendtx</code> is here to broadcast that transaction so that it can be published on the blockchain. You can broadcast to peers retrieved from a DNS seed or specify with IP/port. The application will try to connect to a default maximum of 10 peers, send the transaction to two of them, and listen on the remaining ones if the transaction has been relayed back. Alongside Libdogecoin, <code>sendtx</code> gives you the capability to publish your own transactions directly to the blockchain without using external services.</p>
+<h3 id="usage-1"><a class="header" href="#usage-1">Usage</a></h3>
+<p>Similar to <code>such</code>, <code>sendtx</code> is simple to run and is invoked by simply running the command <code>./sendtx</code> in the top level of the Libdogecoin directory, which is then simply followed by the transaction hex to broadcast rather than a command like in <code>such</code>. There are still several flags that may be helpful</p>
+<div class="table-wrapper"><table><thead><tr><th>Flag</th><th>Name</th><th>Required Arg?</th><th>Usage</th></tr></thead><tbody>
+<tr><td>-t, --testnet</td><td>designate_testnet</td><td>no</td><td>./sendtx -t &lt;tx_hex_for_testnet&gt;</td></tr>
+<tr><td>-r, --regtest</td><td>designate_regtest</td><td>no</td><td>./sendtx -r &lt;tx_hex_for_regtest&gt;</td></tr>
+<tr><td>-d, --debug</td><td>designate_debug</td><td>no</td><td>./sendtx -d &lt;tx_hex&gt;</td></tr>
+<tr><td>-s, --timeout</td><td>timeout_threshold</td><td>yes</td><td>./sendtx -s 10 &lt;tx_hex&gt;</td></tr>
+<tr><td>-i, --ips</td><td>ip_addresses</td><td>yes</td><td>./sendtx -i 127.0.0.1:22556,192.168.0.1:22556 &lt;tx_hex&gt;</td></tr>
+<tr><td>-m, --maxnodes</td><td>max_connected_nodes</td><td>yes</td><td>./sendtx -m 6 &lt;tx_hex&gt;</td></tr>
+</tbody></table>
+</div>
+<p>Lastly, to display only the version of <code>sendtx</code>, simply run the following command:</p>
+<pre><code>./sendtx -v
+</code></pre>
+<h3 id="examples-1"><a class="header" href="#examples-1">Examples</a></h3>
+<p>Below are some examples on how to use the <code>sendtx</code> tool in practice.</p>
+<h5 id="send-a-raw-transaction-to-random-peers-on-mainnet"><a class="header" href="#send-a-raw-transaction-to-random-peers-on-mainnet">Send a raw transaction to random peers on mainnet</a></h5>
+<pre><code>./sendtx &lt;tx_hex&gt;
+</code></pre>
+<h5 id="send-a-raw-transaction-to-random-peers-on-testnet-and-show-debug-information"><a class="header" href="#send-a-raw-transaction-to-random-peers-on-testnet-and-show-debug-information">Send a raw transaction to random peers on testnet and show debug information</a></h5>
+<pre><code>./sendtx -d -t &lt;tx_hex&gt;
+</code></pre>
+<h5 id="send-a-raw-transaction-to-specific-peers-on-mainnet-and-show-debug-information-using-a-timeout-of-5s"><a class="header" href="#send-a-raw-transaction-to-specific-peers-on-mainnet-and-show-debug-information-using-a-timeout-of-5s">Send a raw transaction to specific peers on mainnet and show debug information using a timeout of 5s</a></h5>
+<pre><code>./sendtx -d -s 5 -i 192.168.1.110:22556,127.0.0.1:22556 &lt;tx_hex&gt;
+</code></pre>
+<h5 id="send-a-raw-transaction-to-at-most-5-random-peers-on-mainnet"><a class="header" href="#send-a-raw-transaction-to-at-most-5-random-peers-on-mainnet">Send a raw transaction to at most 5 random peers on mainnet</a></h5>
+<pre><code>./sendtx -m 5 &lt;tx_hex&gt;
+</code></pre>
+<h2 id="the-spvnode-tool"><a class="header" href="#the-spvnode-tool">The <code>spvnode</code> Tool</a></h2>
+<p><code>spvnode</code> is a command-line tool that operates a Simple Payment Verification (SPV) node for the Dogecoin blockchain. It enables users to interact with the Dogecoin network, verify transactions, and stay in sync with the blockchain.</p>
+<h3 id="operation-modes"><a class="header" href="#operation-modes">Operation Modes</a></h3>
+<p><code>spvnode</code> supports two operational modes:</p>
+<ol>
+<li>
+<p><strong>Header-Only Mode</strong>: This mode is for quickly catching up with the blockchain by downloading only the block headers. This mode is typically used for initial sync, and then the node can switch to full block mode for verifying transactions.</p>
+</li>
+<li>
+<p><strong>Full Block Mode</strong>: After catching up with the blockchain headers, <code>spvnode</code> can switch to this mode to download full blocks for detailed transaction history scanning. This is essential for verifying transactions related to the user's wallet addresses.</p>
+</li>
+</ol>
+<h3 id="usage-2"><a class="header" href="#usage-2">Usage</a></h3>
+<p>To use <code>spvnode</code>, execute it from the top level of the Libdogecoin directory. Start the tool by running <code>./spvnode</code> followed by the <code>scan</code> command. There are several flags that can be used to customize the behavior of <code>spvnode</code>:</p>
+<p>Each flag is accompanied by a description and usage example. To view the version of <code>spvnode</code>, simply run:</p>
+<pre><code>./spvnode -v
+</code></pre>
+<p>Run <code>spvnode</code> in header-only mode for a fast catch-up:</p>
+<pre><code>./spvnode scan
+</code></pre>
+<p>To activate full block validation mode for comprehensive address scanning, include the -b flag:</p>
+<pre><code>./spvnode -b scan
+</code></pre>
+<p>To utilize checkpoints for faster initial sync, apply the -p flag:</p>
+<pre><code>./spvnode -p scan
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Flag</th><th>Name</th><th>Required Arg?</th><th>Usage</th></tr></thead><tbody>
+<tr><td><code>-t</code>, <code>--testnet</code></td><td>Testnet Mode</td><td>No</td><td>Activate testnet: <code>./spvnode -t scan</code></td></tr>
+<tr><td><code>-r</code>, <code>--regtest</code></td><td>Regtest Mode</td><td>No</td><td>Activate regtest network: <code>./spvnode -r scan</code></td></tr>
+<tr><td><code>-i</code>, <code>--ips</code></td><td>Initial Peers</td><td>Yes</td><td>Specify initial peers: <code>./spvnode -i 127.0.0.1:22556 scan</code></td></tr>
+<tr><td><code>-d</code>, <code>--debug</code></td><td>Debug Mode</td><td>No</td><td>Enable debug output: <code>./spvnode -d scan</code></td></tr>
+<tr><td><code>-m</code>, <code>--maxnodes</code></td><td>Max Peers</td><td>No</td><td>Set max peers: <code>./spvnode -m 8 scan</code></td></tr>
+<tr><td><code>-a</code>, <code>--address</code></td><td>Address</td><td>Yes</td><td>Use address: <code>./spvnode -a "your address here" scan</code></td></tr>
+<tr><td><code>-n</code>, <code>--mnemonic</code></td><td>Mnemonic Seed</td><td>Yes</td><td>Use BIP39 mnemonic: <code>./spvnode -n "your mnemonic here" scan</code></td></tr>
+<tr><td><code>-s</code>, <code>--pass_phrase</code></td><td>Passphrase</td><td>No</td><td>Passphrase for BIP39 seed: <code>./spvnode -s scan</code></td></tr>
+<tr><td><code>-f</code>, <code>--dbfile</code></td><td>Database File</td><td>No</td><td>Headers DB file/mem-only (0): <code>./spvnode -f 0 scan</code></td></tr>
+<tr><td><code>-c</code>, <code>--continuous</code></td><td>Continuous Mode</td><td>No</td><td>Run continuously: <code>./spvnode -c scan</code></td></tr>
+<tr><td><code>-b</code>, <code>--full_sync</code></td><td>Full Sync</td><td>No</td><td>Perform a full sync: <code>./spvnode -b scan</code></td></tr>
+<tr><td><code>-p</code>, <code>--checkpoint</code></td><td>Checkpoint</td><td>No</td><td>Enable checkpoint sync: <code>./spvnode -p scan</code></td></tr>
+<tr><td><code>-w</code>, <code>--wallet_file</code></td><td>Wallet File</td><td>Yes</td><td>Specify wallet file: <code>./spvnode -w "./wallet.db" scan</code></td></tr>
+<tr><td><code>-h</code>, <code>--headers_file</code></td><td>Headers File</td><td>Yes</td><td>Specify headers DB file: <code>./spvnode -h "./headers.db" scan</code></td></tr>
+<tr><td><code>-l</code>, <code>--no_prompt</code></td><td>No Prompt</td><td>No</td><td>Load wallet and headers without prompt: <code>./spvnode -l scan</code></td></tr>
+<tr><td><code>-y</code>, <code>--encrypted_file</code></td><td>Encrypted File</td><td>Yes</td><td>Use encrypted file: <code>./spvnode -y 0 scan</code></td></tr>
+<tr><td><code>-j</code>, <code>--use_tpm</code></td><td>Use TPM</td><td>No</td><td>Utilize TPM for decryption: <code>./spvnode -j scan</code></td></tr>
+<tr><td><code>-k</code>, <code>--master_key</code></td><td>Master Key</td><td>No</td><td>Use master key decryption: <code>./spvnode -k scan</code></td></tr>
+<tr><td><code>-z</code>, <code>--daemon</code></td><td>Daemon Mode</td><td>No</td><td>Run as a daemon: <code>./spvnode -z scan</code></td></tr>
+</tbody></table>
+</div>
+<h3 id="commands"><a class="header" href="#commands">Commands</a></h3>
+<p>The primary command for <code>spvnode</code> is <code>scan</code>, which syncs the blockchain headers:</p>
+<h4 id="scan"><a class="header" href="#scan"><code>scan</code></a></h4>
+<p>Connects to the Dogecoin network and synchronizes the blockchain headers to the local database.</p>
+<h3 id="callback-functions"><a class="header" href="#callback-functions">Callback Functions</a></h3>
+<p>The tool provides several callbacks for custom integration:</p>
+<ul>
+<li><code>spv_header_message_processed</code>: Triggered when a header is processed.</li>
+<li><code>spv_sync_completed</code>: Invoked upon completion of the sync process.</li>
+</ul>
+<h3 id="best-practices-and-notes"><a class="header" href="#best-practices-and-notes">Best Practices and Notes</a></h3>
+<p>When not specifying -w, spvnode will default to using main_wallet.db. To prevent unintended interactions with main_wallet.db, it's important to be consistent with the use of flags. The best practice is to always use -w and specify a distinct wallet file, especially when using new mnemonics or keys.</p>
+<p>When using -n with a mnemonic, instead of main_wallet.db, spvnode will generate main_mnemonic_wallet.db.</p>
+<h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
+<h4 id="sync-up-to-the-chain-tip-and-stores-all-headers-in-headersdb-quit-once-synced"><a class="header" href="#sync-up-to-the-chain-tip-and-stores-all-headers-in-headersdb-quit-once-synced">Sync up to the chain tip and stores all headers in <code>headers.db</code> (quit once synced):</a></h4>
+<pre><code>./spvnode scan
+</code></pre>
+<h4 id="sync-up-to-the-chain-tip-and-give-some-debug-output-during-that-process"><a class="header" href="#sync-up-to-the-chain-tip-and-give-some-debug-output-during-that-process">Sync up to the chain tip and give some debug output during that process:</a></h4>
+<pre><code>./spvnode -d scan
+</code></pre>
+<h4 id="sync-up-show-debug-info-dont-store-headers-in-file-only-in-memory-wait-for-new-blocks"><a class="header" href="#sync-up-show-debug-info-dont-store-headers-in-file-only-in-memory-wait-for-new-blocks">Sync up, show debug info, don't store headers in file (only in memory), wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -b scan
+</code></pre>
+<h4 id="sync-up-with-an-address-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks"><a class="header" href="#sync-up-with-an-address-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks">Sync up, with an address, show debug info, don't store headers in file, wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -a "DSVw8wkkTXccdq78etZ3UwELrmpfvAiVt1" -b scan
+</code></pre>
+<h4 id="sync-up-with-a-wallet-file-main_walletdb-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks"><a class="header" href="#sync-up-with-a-wallet-file-main_walletdb-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks">Sync up, with a wallet file "main_wallet.db", show debug info, don't store headers in file, wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -w "./main_wallet.db" -b scan
+</code></pre>
+<h4 id="sync-up-with-a-wallet-file-main_walletdb-show-debug-info-with-a-headers-file-main_headersdb-wait-for-new-blocks"><a class="header" href="#sync-up-with-a-wallet-file-main_walletdb-show-debug-info-with-a-headers-file-main_headersdb-wait-for-new-blocks">Sync up, with a wallet file "main_wallet.db", show debug info, with a headers file "main_headers.db", wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -c -w "./main_wallet.db" -h "./main_headers.db" -b scan
+</code></pre>
+<h4 id="sync-up-with-a-wallet-file-main_walletdb-with-an-address-show-debug-info-with-a-headers-file-with-a-headers-file-main_headersdb-wait-for-new-blocks"><a class="header" href="#sync-up-with-a-wallet-file-main_walletdb-with-an-address-show-debug-info-with-a-headers-file-with-a-headers-file-main_headersdb-wait-for-new-blocks">Sync up, with a wallet file "main_wallet.db", with an address, show debug info, with a headers file, with a headers file "main_headers.db", wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -c -a "DSVw8wkkTXccdq78etZ3UwELrmpfvAiVt1" -w "./main_wallet.db" -h "./main_headers.db" -b scan
+</code></pre>
+<h4 id="sync-up-with-encrypted-mnemonic-0-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks"><a class="header" href="#sync-up-with-encrypted-mnemonic-0-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks">Sync up, with encrypted mnemonic 0, show debug info, don't store headers in file, wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -y 0 -b scan
+</code></pre>
+<h4 id="sync-up-with-encrypted-mnemonic-0-bip39-passphrase-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks"><a class="header" href="#sync-up-with-encrypted-mnemonic-0-bip39-passphrase-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks">Sync up, with encrypted mnemonic 0, BIP39 passphrase, show debug info, don't store headers in file, wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -y 0 -s -b scan
+</code></pre>
+<h4 id="sync-up-with-encrypted-mnemonic-0-bip39-passphrase-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks-use-tpm"><a class="header" href="#sync-up-with-encrypted-mnemonic-0-bip39-passphrase-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks-use-tpm">Sync up, with encrypted mnemonic 0, BIP39 passphrase, show debug info, don't store headers in file, wait for new blocks, use TPM:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -y 0 -s -j -b scan
+</code></pre>
+<h4 id="sync-up-with-encrypted-key-0-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks-use-master-key"><a class="header" href="#sync-up-with-encrypted-key-0-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks-use-master-key">Sync up, with encrypted key 0, show debug info, don't store headers in file, wait for new blocks, use master key:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -y 0 -k -b scan
+</code></pre>
+<h4 id="sync-up-with-encrypted-key-0-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks-use-master-key-use-tpm"><a class="header" href="#sync-up-with-encrypted-key-0-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks-use-master-key-use-tpm">Sync up, with encrypted key 0, show debug info, don't store headers in file, wait for new blocks, use master key, use TPM:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -y 0 -k -j -b scan
+</code></pre>
+<h4 id="sync-up-with-mnemonic-test-bip39-passphrase-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks"><a class="header" href="#sync-up-with-mnemonic-test-bip39-passphrase-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks">Sync up, with mnemonic "test", BIP39 passphrase, show debug info, don't store headers in file, wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -n "test" -s -b scan
+</code></pre>
+<h4 id="sync-up-with-a-wallet-file-main_walletdb-with-encrypted-mnemonic-0-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks"><a class="header" href="#sync-up-with-a-wallet-file-main_walletdb-with-encrypted-mnemonic-0-show-debug-info-dont-store-headers-in-file-wait-for-new-blocks">Sync up, with a wallet file "main_wallet.db", with encrypted mnemonic 0, show debug info, don't store headers in file, wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -f 0 -c -w "./main_wallet.db" -y 0 -b scan
+</code></pre>
+<h4 id="sync-up-with-a-wallet-file-main_walletdb-with-encrypted-mnemonic-0-show-debug-info-with-a-headers-file-main_headersdb-wait-for-new-blocks"><a class="header" href="#sync-up-with-a-wallet-file-main_walletdb-with-encrypted-mnemonic-0-show-debug-info-with-a-headers-file-main_headersdb-wait-for-new-blocks">Sync up, with a wallet file "main_wallet.db", with encrypted mnemonic 0, show debug info, with a headers file "main_headers.db", wait for new blocks:</a></h4>
+<pre><code>./spvnode -d -c -w "./main_wallet.db" -h "./main_headers.db" -y 0 -b scan
+</code></pre>
+<h4 id="sync-up-with-a-wallet-file-main_walletdb-with-encrypted-mnemonic-0-show-debug-info-with-a-headers-file-main_headersdb-wait-for-new-blocks-use-tpm"><a class="header" href="#sync-up-with-a-wallet-file-main_walletdb-with-encrypted-mnemonic-0-show-debug-info-with-a-headers-file-main_headersdb-wait-for-new-blocks-use-tpm">Sync up, with a wallet file "main_wallet.db", with encrypted mnemonic 0, show debug info, with a headers file "main_headers.db", wait for new blocks, use TPM:</a></h4>
+<pre><code>./spvnode -d -c -w "./main_wallet.db" -h "./main_headers.db" -y 0 -j -b scan
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="signing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="transaction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="signing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="transaction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="editor.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
