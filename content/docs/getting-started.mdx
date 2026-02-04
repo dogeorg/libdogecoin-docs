@@ -1,0 +1,61 @@
+---
+title: Getting started
+description: Download, build, and integrate Libdogecoin.
+---
+
+# Getting Started with Libdogecoin
+
+## Download Pre-built Binaries
+
+To use Libdogecoin directly out of the box without making any modifications to the source code, you can download the pre-made binaries from [GitHub Releases](https://github.com/dogecoinfoundation/libdogecoin/releases). This is the easiest to start with for new developers, but does not enable customization of the library. In order to increase control over installation, refer to the section below on manually building Libdogecoin.
+
+## Building Manually
+
+### Step 1: Install Dependencies
+
+For Ubuntu and Debian Linux, you will need to install the following dependencies before building:
+
+- autoconf
+- automake
+- libtool
+- libevent-dev
+- libunistring-dev
+- build-essential
+
+This can be done with:
+
+```bash
+sudo apt-get update
+sudo apt-get install autoconf automake libtool libevent-dev libunistring-dev build-essential
+```
+
+For Windows, you will need: Visual Studio Code, Visual Studio Build Tools, C++ and CMake Extensions, [CMake](https://cmake.org/download/), [Git](https://git-scm.com/downloads), and [Python](https://www.python.org/downloads/).
+
+### Step 2: Build Libraries
+
+Run:
+
+```bash
+./autogen.sh
+./configure
+make
+```
+
+To build the pure library without net support:
+
+```bash
+./autogen.sh
+./configure --disable-net --disable-tools
+make
+```
+
+On Windows, use CMake:
+
+```bash
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+For more options and cross-compilation, see the full documentation in the repository.

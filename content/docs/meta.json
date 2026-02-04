@@ -1,0 +1,31 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "---[info]Start---",
+    "what",
+    "getting-started",
+    "address",
+    "transaction",
+    "transaction-extended",
+    "signing",
+    "eckey",
+    "tools",
+    "rest",
+    "---[shield]Security---",
+    "enclaves",
+    "yubikey",
+    "---[map]Project---",
+    "project-roadmap",
+    "projects",
+    "changelog",
+    "release-process",
+    "---[code]Resources---",
+    "[code][GitHub repository](https://github.com/dogecoinfoundation/libdogecoin/tree/0.1.5-dev)",
+    "[edit][Edit documentation](https://github.com/dogeorg/libdogecoin-docs)",
+    "---[group]Community---",
+    "[account_balance][Dogecoin Foundation](https://foundation.dogecoin.com)",
+    "[pets][X](https://x.com/dogecoin)",
+    "[chat][Discord](https://discord.gg/dogecoin)",
+    "[forum][Reddit](https://reddit.com/r/dogecoin)"
+  ]
+}

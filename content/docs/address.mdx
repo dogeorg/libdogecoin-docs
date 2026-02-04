@@ -1,0 +1,26 @@
+---
+title: Addresses
+description: Libdogecoin Address API — simple addresses, HD addresses, seed phrases.
+---
+
+# Libdogecoin Address API
+
+## Introduction
+
+A Dogecoin address is the public key of an asymmetric key pair, and provides a designation on the network to hold Dogecoins on the ledger. By holding the private key for an address on the ledger, you have the ability to sign transactions to move (spend/send) the Dogecoins attributed to the address.
+
+Dogecoin addresses can be created in a number of ways, each with benefits depending on the objective of the address owner(s).
+
+### Simple Addresses
+
+These are the most common form of Dogecoin address, a single private key with a single public key (address). Most often these are what an exchange would use to retain full custody of a wallet on behalf of their users, or for a simple desktop / mobile wallet they provide a basic approach to address management.
+
+### HD Addresses
+
+HD, or *Hierarchical Deterministic* addresses, unlike simple addresses are created from a seed key-phrase, usually twelve random unique words rather than a 256-bit private key. The key-phrase is then used (with the addition of a simple, incrementing number) to generate an unlimited supply of public Dogecoin addresses which the holder of the key-phrase can sign.
+
+### Seed phrases
+
+Seed phrases, also known as mnemonic phrases, are a commonly used method to create and backup HD addresses. These phrases consist of 12 or 24 random words, generated from a 128 or 256-bit entropy source, respectively.
+
+For the full Address API reference (Essential and Advanced APIs), see the [libdogecoin repository](https://github.com/dogecoinfoundation/libdogecoin).
