@@ -1,9 +1,12 @@
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import '@/styles/global.css';
-import { Inter } from 'next/font/google';
+import { Comic_Neue } from 'next/font/google';
 import { TopNav } from '@/components/layout/TopNav';
 
-const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
+const comicNeue = Comic_Neue({
+  subsets: ['latin'],
+  weight: ['300', '400', '700'],
+});
 
 const baseUrl = 'https://lib.dogecoin.org';
 const ogTitle = 'libdogecoin - Dogecoin building blocks';
@@ -46,7 +49,7 @@ export const viewport = { themeColor: '#8B5CF6' };
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html lang="en" className={comicNeue.className} suppressHydrationWarning>
       <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </head>
