@@ -4,11 +4,19 @@ var docs = defineDocs({
   dir: "content/docs",
   docs: {
     schema: frontmatterSchema,
-    postprocess: { includeProcessedMarkdown: true }
+    postprocess: {
+      includeProcessedMarkdown: true
+    }
   },
-  meta: { schema: metaSchema }
+  meta: {
+    schema: metaSchema
+  }
 });
-var source_config_default = defineConfig({ mdxOptions: {} });
+var source_config_default = defineConfig({
+  mdxOptions: {
+    // MDX options
+  }
+});
 export {
   source_config_default as default,
   docs

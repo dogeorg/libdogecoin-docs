@@ -2,6 +2,12 @@ import { createElement } from 'react';
 import { docs } from 'fumadocs-mdx:collections/server';
 import { type InferPageType, loader } from 'fumadocs-core/source';
 
+/**
+ * Resolve icon string from MDX frontmatter or meta.json to Google Material Icons.
+ * Set `icon: "rocket_launch"` (or any Material Icons name) in frontmatter, or use
+ * ---[icon_name]Section Title--- in meta.json for separators.
+ * See https://fonts.google.com/icons
+ */
 function materialIconResolver(iconName: string | undefined) {
   if (!iconName || typeof iconName !== 'string') return undefined;
   return createElement('span', {
@@ -12,6 +18,7 @@ function materialIconResolver(iconName: string | undefined) {
   }, iconName.trim());
 }
 
+// See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
   baseUrl: '/docs',
   source: docs.toFumadocsSource(),
@@ -20,5 +27,9 @@ export const source = loader({
 
 export function getPageImage(page: InferPageType<typeof source>) {
   const segments = [...page.slugs, 'image.png'];
-  return { segments, url: `/og/docs/${segments.join('/')}` };
+
+  return {
+    segments,
+    url: `/og/docs/${segments.join('/')}`,
+  };
 }
