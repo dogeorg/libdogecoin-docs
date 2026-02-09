@@ -9,26 +9,26 @@ const comicNeue = Comic_Neue({
 });
 
 const baseUrl = 'https://lib.dogecoin.org';
-const ogTitle = 'libdogecoin - Dogecoin building blocks';
-const ogDescription =
+const title = 'libdogecoin - Dogecoin building blocks';
+const description =
   'libdogecoin documentation: a clean C library of Dogecoin building blocks. Complete implementation of Dogecoin protocols, addresses, transactions, signing, and more.';
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
-  title: 'libdogecoin Docs',
-  description: 'libdogecoin documentation: a clean C library of Dogecoin building blocks.',
+  title,
+  description,
   openGraph: {
     type: 'website',
     siteName: 'libdogecoin',
-    title: ogTitle,
-    description: ogDescription,
+    title,
+    description,
     url: baseUrl,
     images: [
       {
         url: '/img/social-card.png',
         width: 1200,
         height: 630,
-        alt: ogTitle,
+        alt: title,
       },
     ],
     locale: 'en_US',
@@ -37,10 +37,10 @@ export const metadata = {
     card: 'summary_large_image',
     site: '@dogecoin',
     creator: '@dogecoin',
-    title: ogTitle,
-    description: ogDescription,
+    title,
+    description,
     images: ['/img/social-card.png'],
-    imagesAlt: ogTitle,
+    imagesAlt: title,
   },
   icons: { icon: '/img/libdogecoin-logo-purple.png', apple: '/img/libdogecoin-logo-purple.png' },
 };

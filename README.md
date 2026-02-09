@@ -141,6 +141,7 @@ Maintainers will review and merge. Thank you for helping improve the docs.
 
 | Path | Description |
 |------|-------------|
+| `source.config.ts` | Fumadocs config (TypeScript, at root). MDX collections are generated into `.source/` (gitignored). |
 | `app/(home)` | Landing page and home layout |
 | `app/docs` | Documentation layout and pages |
 | `app/api/search` | Search API route |

@@ -1,6 +1,6 @@
 import { createElement } from 'react';
 import { docs } from 'fumadocs-mdx:collections/server';
-import { type InferPageType, loader } from 'fumadocs-core/source';
+import { loader } from 'fumadocs-core/source';
 
 /**
  * Resolve icon string from MDX frontmatter or meta.json to Google Material Icons.
@@ -24,12 +24,3 @@ export const source = loader({
   source: docs.toFumadocsSource(),
   icon: materialIconResolver,
 });
-
-export function getPageImage(page: InferPageType<typeof source>) {
-  const segments = [...page.slugs, 'image.png'];
-
-  return {
-    segments,
-    url: `/og/docs/${segments.join('/')}`,
-  };
-}
