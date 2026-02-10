@@ -22,6 +22,9 @@ export const docs = defineDocs({
 
 export default defineConfig({
   mdxOptions: {
-    // MDX options
+    // Code blocks use cpp/bash/cmake etc. (all in default Shiki bundle)
+    rehypeCodeOptions: {
+      langs: ['js', 'jsx', 'ts', 'tsx', 'json', 'bash', 'sh', 'cpp', 'cmake', 'markdown', 'text'],
+    },
   },
 });

@@ -1,15 +1,30 @@
 ---
 title: What is libdogecoin?
-description: Libdogecoin is a clean C library of Dogecoin building blocks.
+description: A clean C library of Dogecoin building blocks and protocol implementation.
 ---
 
 # Libdogecoin, a clean C library of Dogecoin building blocks
 
-![LibDogecoin Logo](/img/libdogecoin-logo-purple.png)
+<p><img src="/img/libdogecoin-logo-purple.png" alt="The LibDogecoin Logo" width="60%" style={{ marginLeft: '20%' }}/></p>
 
-<a href="https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ci.yml">
-  <img src="https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ci.yml/badge.svg" alt="CI" width={80} height={20} />
-</a>
+[![CI](https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ci.yml/badge.svg)](https://github.com/dogecoinfoundation/libdogecoin/actions/workflows/ci.yml)
+
+## Table of Contents
+
+- [Libdogecoin, a clean C library of Dogecoin building blocks.](#libdogecoin-a-clean-c-library-of-dogecoin-building-blocks)
+  - [Table of Contents](#table-of-contents)
+  - [What is Libdogecoin?](#what-is-libdogecoin)
+    - [Advantages of Libdogecoin](#advantages-of-libdogecoin)
+    - [Current features](#current-features)
+  - [Why C?](#why-c)
+  - [Dogecoin Standard/Spec](#dogecoin-standardspec)
+  - [Code of Shibes](#code-of-shibes)
+  - [Contributing](#contributing)
+  - [Repository Navigation](#repository-navigation)
+  - [Quick Start](#quick-start)
+    - [Preliminary](#preliminary)
+    - [Building](#building)
+    - [Integration](#integration)
 
 ## What is Libdogecoin?
 
@@ -17,12 +32,13 @@ Libdogecoin will be a complete implementation of the Dogecoin Protocols, as a C 
 
 Libdogecoin is here to make crypto development **simple**, **clean**, and **fun**!
 
-This will be a pure library, providing a set of callable functions to implement in external projects, but not a 'runnable' node facility. Although we expect building a Dogecoin Node will be a useful test and early outcome, that will live in another repository.
+This will be a pure library, providing a set of callable functions to implement in external projects, but not a ÔÇÿrunnableÔÇÖ node facility. Although we expect building a Dogecoin Node will be a useful test and early outcome, that will live in another repository.
 
 It is intended that connecting the bits together into an engine be done at the level above, via the networking libraries of the host language.
 
-- [See the Project Roadmap for more on the planned stages of development](/docs/project-roadmap)
-- [See the Dogecoin Trailmap for more on libdogecoin](https://foundation.dogecoin.com/trailmap/libdogecoin/)
+[See the Project Roadmap for more on the planned stages of development](/docs/project-roadmap)
+
+[See the Dogecoin Trailmap for more on libdogecoin](https://foundation.dogecoin.com/trailmap/libdogecoin/)
 
 ### Advantages of Libdogecoin
 
@@ -51,79 +67,80 @@ The Dogecoin Core project is written in C++, why move to C? This is a good quest
 
 The Dogecoin Core project was inherited when Dogecoin was originally forked and makes use of some reasonable heavy C++ libraries that add complexity to the build process, as well as cognitive complexity for new developers.
 
-The desire is to provide a simple to learn library with few external dependencies that can be built with relatively little setup by new developers. Furthermore the aim of providing wrappers for a number of higher-level languages leans strongly toward either C or RUST from a binding/support perspective, and we believe C still has significantly more support when writing bindings for a wide variety of other languages. C is better supported on embedded/lightweight platforms, with the goal of moving dogecoin beyond the realm of the PC; and actually prepares (constrains it) to be re-coded/adapted in other languages as specific OO and memory mgmt functions of C++ aren't required. Wrappers that previously lived here in this repository have been moved to their own respective projects (python and go bindings) found at [@dogeorg](https://github.com/dogeorg).
+The desire is to provide a simple to learn library with few external dependencies that can be built with relatively little setup by new developers.  Furthermore the aim of providing wrappers for a number of higher-level languages leans strongly toward either C or RUST from a binding/support perspective, and we believe C still has significantly more support when writing bindings for a wide variety of other languages. C is better supported on embedded/lightweight platforms, with the goal of moving dogecoin beyond the realm of the PC; and actually prepares (constrains it) to be re-coded/adapted in other languages as specific OO and memory mgmt functions of C++ aren't required. Wrappers that previously lived here in this repository have been moved to their own respective projects (python and go bindings) found at [@dogeorg](https://github.com/dogeorg).
 
 ## Dogecoin Standard/Spec
 
-During the process of extracting the fundamentals from the Dogecoin Core Wallet (reference implementation) we aim to document 'how Dogecoin works' as a suite of tests and documents we are calling the Dogecoin Standard.
+During the process of extracting the fundamentals from the Dogecoin Core Wallet (reference implementation) we aim to document ÔÇÿhow Dogecoin worksÔÇÖ as a suite of tests and documents we are calling the Dogecoin Standard.
 
 See `/spec`
 
-By doing this we will be able to verify that the Libdogecoin implementation of Dogecoin's internals is accurate to the OG wallet, and thus provide a mechanism for any future Dogecoin implementations to verify compliance with the Dogecoin Network.
+By doing this we will be able to verify that the Libdogecoin implementation of DogecoinÔÇÖs internals is accurate to the OG wallet, and thus provide a mechanism for any future Dogecoin implementations to verify compliance with the Dogecoin Network.
 
 ## Code of Shibes
 
-By contributing to this repository you agree to be a basic human being, please see [CONDUCT.md](https://github.com/dogecoinfoundation/libdogecoin/blob/main/CONDUCT.md)
+By contributing to this repository you agree to be a basic human being, please see [`CONDUCT.md`](https://github.com/dogecoinfoundation/libdogecoin/blob/main/CONDUCT.md)
 
 ## Contributing
 
 ***TL;DR***: Initially during the early phase of development we'll keep this basic, after the library starts to become a dependency for projects in real-world active use this will likely change and the API will become considerably more extensive.
 
-- Express interest and get added to the libdogecoin team on GitHub and join the conversation in the Foundation discord server.
+- Express interest and get added to the libdogecoin team on GitHub
+  and join the conversation in the Foundation discord server.
 - **Branch/PRs in this repository (see above point for access)**
 - **Ensure tests pass and coverage is maintained**
-- **Update libdogecoin.h in [/include/] and example.c in [/contrib/examples/]**
+- **Update libdogecoin.h in [`/include/`] and example.c in [`/contrib/examples/`]**
 - 1 approval from another contributor required to merge to main
 - Don't introduce dependencies without discussion (MIT); our aim is to have as few dependencies as possible, with the ideal (possibly unachievable) goal of having none beyond standard c libs and a compiler.
 - Collaborate before you innovate! (this means, discuss what you're working on where everyone can see, before submitting a change.)
-- Have fun &lt;3
+- Have fun {'<3'}
 
 ## Repository Navigation
 
 Advice on how to navigate this repository:
 
-- [/.libs/] where the static library lives after it has been fully built.
+- [`/.libs/`] where the static library lives after it has been fully built.
 - [`/contrib/<proj>`] a place for misc non-core experiments, utils, demo-nodes etc.
-- [/spec/*.md] a place to begin documenting the Dogecoin Standard as we go.
-- [/include/dogecoin/*.h] provides header files for libdogecoin users, look here for .h.
+- [`/spec/*.md`] a place to begin documenting the Dogecoin Standard as we go.
+- [`/include/dogecoin/*.h`] provides header files for libdogecoin users, look here for .h.
 - [`/src/<feature>/*.c,*.h`] look here for local .c/.h source implementing the contracts in `/include`.
-- [/test/] test suite.
-- [/] Makefile, license, basic readmes and build control files
+- [`/test/`] test suite.
+- [`/`] Makefile, license, basic readmes and build control files
 
 The documentation has many helpful resources regarding setup and usage of Libdogecoin, along with some educational content on the specifics of Dogecoin protocols. Their contents are listed below:
 
-- [Addresses](/docs/address) — Full description of dogecoin addresses and the Libdogecoin Essential Address API.
-- [Getting started](/docs/getting-started) — Detailed instructions for building, installing, and implementing the library in your project.
+- [Address](/docs/address) — Full description of dogecoin addresses and the Libdogecoin Essential Address API.
+- [Getting Started](/docs/getting-started) — Detailed instructions for building, installing, and implementing the library in your project.
 - [Project Roadmap](/docs/project-roadmap) — Our plan for the future of Libdogecoin (with pictures!).
 - [Tools](/docs/tools) — Guidance on how to use provided helper scripts and tools like `such` and `sendtx`.
-- [Transactions](/docs/transaction) — Full description of dogecoin transactions and the Libdogecoin Essential Transaction API.
+- [Transaction](/docs/transaction) — Full description of dogecoin transactions and the Libdogecoin Essential Transaction API.
 
 ## Quick Start
 
-For more detailed build and installation instructions, please refer to [getting_started](/docs/getting-started)
+For more detailed build and installation instructions, please refer to [Getting Started](/docs/getting-started)
 
 ### Preliminary
 
 Before attempting to build, make sure all the necessary dependencies for your architecture are installed.
 
-*Debian/Ubuntu*
+_Debian/Ubuntu_
 
 ```bash
 sudo apt-get install autoconf automake libtool build-essential libevent-dev libunistring-dev
 ```
 
-*MacOS*
+_MacOS_
 
 ```bash
 xcode_select --install
 sudo chown -R $(whoami) $(brew --prefix)/*
 ```
 
-*Other* - Please submit a pull request to add dependencies for your system, or update these.
+_Other_ - Please submit a pull request to add dependencies for your system, or update these.
 
 ### Building
 
-*Debian / Ubuntu*
+_Debian / Ubuntu_
 
 To build the full library, including the `such` and `sendtx` CLI tools, run the following autoconf commands:
 
@@ -145,7 +162,7 @@ make
 
 To build with `cmake` run the following from the project root directory:
 
-```bash
+```cmake
 mkdir build
 cd build
 cmake ..
@@ -162,15 +179,15 @@ In addition to the following instructions we've created an example file that con
 
 To compile that example with `gcc`, first build libdogecoin so the resulting `.a` file will be found in `/.libs` and execute:
 
-```c
+```cpp
 gcc ./contrib/examples/example.c ./.libs/libdogecoin.a -I./include/dogecoin -L./.libs -ldogecoin -lunistring -o example
 ```
 
-then run the example: `./example`. Otherwise continue with something like the following:
+then run the example: `./example`. Otherwise continue with something like the folowing:
 
-*main.c:*
+_main.c:_
 
-```c
+```cpp
 #include <stdio.h>
 #include "libdogecoin.h"
 
