@@ -24,7 +24,11 @@ export default defineConfig({
   mdxOptions: {
     // Code blocks use cpp/bash/cmake etc. (all in default Shiki bundle)
     rehypeCodeOptions: {
-      langs: ['js', 'jsx', 'ts', 'tsx', 'json', 'bash', 'sh', 'cpp', 'cmake', 'markdown', 'plaintext'],
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+      langs: ['js', 'jsx', 'ts', 'tsx', 'json', 'bash', 'sh', 'cpp', 'cmake', 'markdown'],
     },
   },
 });
