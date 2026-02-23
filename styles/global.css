@@ -1,0 +1,487 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/purple.css';
+@import 'fumadocs-ui/css/preset.css';
+
+/* LibDogecoin theme (same as static libdogecoin-docs) */
+:root {
+  --libdoge-bg-primary: #0b0b10;
+  --libdoge-bg-secondary: #141421;
+  --libdoge-bg-tertiary: #1c1c2f;
+  --libdoge-text-primary: #e7e7f2;
+  --libdoge-text-secondary: #b5b5cc;
+  --libdoge-accent: #8b5cf6;
+  --libdoge-accent-2: #a78bfa;
+  --libdoge-accent-3: #c4b5fd;
+  --libdoge-link: #c4b5fd;
+  --libdoge-link-hover: #8b5cf6;
+}
+
+:root,
+.dark {
+  --color-fd-primary: var(--libdoge-accent);
+  --color-fd-primary-foreground: #fff;
+  --color-fd-accent: rgba(139, 92, 246, 0.18);
+  --color-fd-accent-foreground: var(--libdoge-accent-3);
+}
+
+.dark {
+  --color-fd-background: var(--libdoge-bg-primary);
+  --color-fd-foreground: var(--libdoge-text-primary);
+  --color-fd-muted: var(--libdoge-bg-secondary);
+  --color-fd-muted-foreground: var(--libdoge-text-secondary);
+  --color-fd-popover: var(--libdoge-bg-tertiary);
+  --color-fd-popover-foreground: var(--libdoge-text-primary);
+  --color-fd-card: var(--libdoge-bg-secondary);
+  --color-fd-card-foreground: var(--libdoge-text-primary);
+  --color-fd-border: rgba(255, 255, 255, 0.08);
+  --color-fd-secondary: var(--libdoge-bg-tertiary);
+  --color-fd-secondary-foreground: var(--libdoge-text-primary);
+  --color-fd-ring: var(--libdoge-accent-2);
+}
+
+.dark #nd-sidebar {
+  --color-fd-muted: var(--libdoge-bg-secondary);
+  --color-fd-secondary: var(--libdoge-bg-tertiary);
+  --color-fd-muted-foreground: var(--libdoge-text-secondary);
+}
+
+main h1, main h2, main h3, main h4, main h5, main h6 {
+  color: var(--libdoge-accent-3);
+}
+
+/* Top bar: LibDogecoin style */
+.libdoge-top-nav {
+  background-color: rgba(20, 20, 33, 0.9);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.35);
+  padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1100;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+body:has(.libdoge-top-nav) {
+  padding-top: 4.5rem;
+  --fd-banner-height: 4.5rem;
+}
+
+#nd-sidebar-mobile {
+  top: 75px !important;
+  height: calc(100vh - 75px) !important;
+  max-height: calc(100dvh - 75px);
+}
+
+.libdoge-top-nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+  gap: 1rem;
+}
+
+.libdoge-top-nav-menu-slot {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 2.5rem;
+}
+
+@media (max-width: 767px) {
+  #sidebar-trigger-slot,
+  .libdoge-top-nav-menu-slot {
+    display: none !important;
+  }
+}
+
+.libdoge-top-nav-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  color: var(--libdoge-text-primary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.libdoge-top-nav-menu-trigger:hover {
+  color: var(--libdoge-accent-3);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.libdoge-top-nav-menu-trigger .material-icons {
+  font-size: 1.5rem;
+}
+
+.libdoge-top-nav-logo {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.libdoge-top-nav-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.libdoge-logo-icon {
+  height: 40px;
+  width: auto;
+  filter: drop-shadow(0 4px 10px rgba(139, 92, 246, 0.35));
+}
+
+.libdoge-logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--libdoge-accent-3);
+  text-shadow: 0 10px 30px rgba(139, 92, 246, 0.25);
+}
+
+.libdoge-top-nav-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.libdoge-top-nav-link {
+  color: var(--libdoge-text-primary);
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.libdoge-top-nav-link:hover {
+  color: var(--libdoge-accent-3);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.libdoge-top-nav-link .material-icons {
+  font-size: 1.5rem;
+}
+
+#nd-sidebar .material-icons,
+[data-sidebar-placeholder] .material-icons {
+  font-size: 1rem !important;
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#nd-sidebar {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#nd-sidebar > div:last-of-type[class*="border-t"] {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+/* Sidebar footer row: show Dogecoin Foundation logo link on the left of theme toggle */
+#nd-sidebar > div[class*="border-t"] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#nd-sidebar > div[class*="border-t"] > div.flex.items-center:first-child {
+  order: 2;
+  flex: 1;
+  min-width: 0;
+}
+
+#nd-sidebar > div[class*="border-t"] > a.libdoge-sidebar-foundation-link {
+  order: 1;
+  flex-shrink: 0;
+}
+
+.libdoge-sidebar-foundation-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.libdoge-sidebar-foundation-link:hover {
+  opacity: 0.85;
+}
+
+.libdoge-sidebar-foundation-logo {
+  width: 5rem;
+  height: auto;
+  max-height: 2.5rem;
+  object-fit: contain;
+  display: block;
+}
+
+.dark .libdoge-sidebar-foundation-logo {
+  filter: brightness(0) invert(1);
+}
+
+/* Light mode: sidebar link hover – darker text so it stays visible */
+:root:not(.dark) #nd-sidebar a:hover {
+  color: #1a1a2e !important;
+}
+
+.libdoge-sidebar-logo {
+  height: 28px;
+  width: auto;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(139, 92, 246, 0.35));
+}
+
+/* Hide empty nav title link when logo/title removed from sidebar */
+#nd-sidebar .flex > a:first-of-type:empty {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  [data-sidebar-placeholder] {
+    min-width: var(--fd-sidebar-width);
+    --fd-sidebar-width: 268px;
+  }
+  #nd-docs-layout {
+    --fd-sidebar-col: var(--fd-sidebar-width);
+  }
+}
+
+/* ========== Hero (text left, image + animation right, like radiodoge; image can sit behind text) ========== */
+.libdoge-hero-section {
+  background:
+    radial-gradient(1000px 350px at 10% 25%, rgba(139, 92, 246, 0.35) 0%, transparent 60%),
+    radial-gradient(900px 350px at 80% 70%, rgba(167, 139, 250, 0.22) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(20, 20, 33, 0.2) 40%, rgba(0, 0, 0, 0) 100%);
+  background-color: var(--libdoge-bg-primary);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 14px;
+  padding: 3rem 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  position: relative;
+  overflow: hidden;
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+}
+
+/* Light mode: hero keeps the same dark look as dark mode */
+:root:not(.dark) .libdoge-hero-section {
+  background:
+    radial-gradient(1000px 350px at 10% 25%, rgba(139, 92, 246, 0.35) 0%, transparent 60%),
+    radial-gradient(900px 350px at 80% 70%, rgba(167, 139, 250, 0.22) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(20, 20, 33, 0.2) 40%, rgba(0, 0, 0, 0) 100%);
+  background-color: var(--libdoge-bg-primary);
+}
+
+.libdoge-hero-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+}
+
+/* Text on the left, top row */
+.libdoge-hero-text {
+  align-self: flex-start;
+  max-width: 55%;
+  min-width: 280px;
+  text-align: left;
+  position: relative;
+  z-index: 2;
+}
+
+.libdoge-hero-title {
+  font-size: clamp(2rem, 3vw, 3.25rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.75rem;
+  color: var(--libdoge-accent-3);
+}
+
+.libdoge-hero-subtitle {
+  font-size: 1.06rem;
+  color: rgba(231, 231, 242, 0.9);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  max-width: 32rem;
+}
+
+.libdoge-hero-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Image + animation on the right, below the text */
+.libdoge-hero-image {
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 55%;
+  min-width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.libdoge-hero-img {
+  width: min(440px, 100%);
+  height: auto;
+  max-height: 380px;
+  object-fit: contain;
+  border-radius: 14px;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.5));
+  transform: rotate(2deg);
+  animation: libdoge-floaty 4.2s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+@keyframes libdoge-floaty {
+  0%, 100% { transform: rotate(2deg) translateY(0); }
+  50% { transform: rotate(2deg) translateY(-10px); }
+}
+
+/* Building blocks animation (hero overlay on the right side) */
+.libdoge-block-rig {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  border-radius: 14px;
+}
+
+.libdoge-block {
+  position: absolute;
+  width: 46px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.75) 0%, rgba(139, 92, 246, 0.65) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 14px 25px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  opacity: 0.85;
+  animation: libdoge-drop 3.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.libdoge-block::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  right: 10px;
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+@keyframes libdoge-drop {
+  0% { transform: translateY(-120px) rotate(-7deg); opacity: 0; }
+  18% { opacity: 0.9; }
+  45% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+  75% { opacity: 0.9; }
+  100% { transform: translateY(30px) rotate(2deg); opacity: 0; }
+}
+
+.libdoge-b1 { left: 12%; top: 18%; animation-delay: 0s; }
+.libdoge-b2 { left: 22%; top: 46%; animation-delay: 0.35s; width: 58px; }
+.libdoge-b3 { left: 72%; top: 22%; animation-delay: 0.6s; width: 54px; }
+.libdoge-b4 { left: 62%; top: 54%; animation-delay: 0.95s; }
+.libdoge-b5 { left: 38%; top: 70%; animation-delay: 1.25s; width: 62px; }
+.libdoge-b6 { left: 82%; top: 74%; animation-delay: 1.55s; width: 52px; }
+
+@media (max-width: 768px) {
+  .libdoge-hero-section {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3rem 1.5rem;
+  }
+  .libdoge-hero-text {
+    max-width: 100%;
+    text-align: center;
+  }
+  .libdoge-hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .libdoge-hero-buttons {
+    justify-content: center;
+  }
+  .libdoge-hero-image {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    align-self: center;
+    max-width: 100%;
+  }
+  .libdoge-hero-img {
+    max-height: 280px;
+  }
+}
+
+.libdoge-hero-btn {
+  padding: 0.7rem 1.1rem;
+  font-size: 0.98rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 12px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.libdoge-btn-primary {
+  background: linear-gradient(135deg, var(--libdoge-accent) 0%, var(--libdoge-accent-2) 100%);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #0b0b10;
+}
+
+.libdoge-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(139, 92, 246, 0.28);
+}
+
+.libdoge-btn-outline {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-color: rgba(139, 92, 246, 0.25);
+  color: var(--libdoge-text-primary);
+}
+
+.libdoge-btn-outline:hover {
+  transform: translateY(-1px);
+  border-color: rgba(139, 92, 246, 0.45);
+  background-color: rgba(139, 92, 246, 0.14);
+}

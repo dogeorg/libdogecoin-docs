@@ -1,0 +1,3 @@
+# Ensure JSON and scripts use LF on all platforms (avoids parse errors in CI)
+package.json text eol=lf
+*.json text eol=lf
